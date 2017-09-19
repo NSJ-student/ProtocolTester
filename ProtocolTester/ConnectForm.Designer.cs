@@ -62,6 +62,7 @@
 			this.tabConnect.SelectedIndex = 0;
 			this.tabConnect.Size = new System.Drawing.Size(306, 324);
 			this.tabConnect.TabIndex = 0;
+			this.tabConnect.SelectedIndexChanged += new System.EventHandler(this.tabConnect_SelectedIndexChanged);
 			// 
 			// tpSerial
 			// 
@@ -126,6 +127,10 @@
 			// 
 			this.cbFlowControl.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbFlowControl.FormattingEnabled = true;
+			this.cbFlowControl.Items.AddRange(new object[] {
+            "None",
+            "Xon/Xoff",
+            "RTS/CTS"});
 			this.cbFlowControl.Location = new System.Drawing.Point(141, 194);
 			this.cbFlowControl.Name = "cbFlowControl";
 			this.cbFlowControl.Size = new System.Drawing.Size(121, 23);
@@ -134,6 +139,18 @@
 			// cbSpeed
 			// 
 			this.cbSpeed.FormattingEnabled = true;
+			this.cbSpeed.Items.AddRange(new object[] {
+            "1200",
+            "2400",
+            "4800",
+            "9600",
+            "19200",
+            "38400",
+            "57600",
+            "115200",
+            "230400",
+            "460300",
+            "921600"});
 			this.cbSpeed.Location = new System.Drawing.Point(141, 78);
 			this.cbSpeed.Name = "cbSpeed";
 			this.cbSpeed.Size = new System.Drawing.Size(121, 23);
@@ -175,9 +192,10 @@
 			this.cbDataBit.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbDataBit.FormattingEnabled = true;
 			this.cbDataBit.Items.AddRange(new object[] {
+            "5",
+            "6",
             "7",
-            "8",
-            "9"});
+            "8"});
 			this.cbDataBit.Location = new System.Drawing.Point(141, 107);
 			this.cbDataBit.Name = "cbDataBit";
 			this.cbDataBit.Size = new System.Drawing.Size(121, 23);
@@ -253,7 +271,6 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Connect";
-			this.VisibleChanged += new System.EventHandler(this.ConnectForm_VisibleChanged);
 			this.tabConnect.ResumeLayout(false);
 			this.tpSerial.ResumeLayout(false);
 			this.tpSerial.PerformLayout();

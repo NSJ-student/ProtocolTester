@@ -11,15 +11,15 @@ using System.IO.Ports;
 
 namespace ProtocolTester
 {
+	public delegate void UpdateControl(string text);
 	public partial class Form1 : Form
 	{
-		ConnectForm conForm;
-		IComm commObj;
+		PortObjects commObj;
 		public Form1()
 		{
 			InitializeComponent();
-			conForm = new ConnectForm();
-			conForm.setSerial += new SetSerial(SerialConnect);
+			commObj = new PortObjects();
+			commObj.OnRecvMsg += PortMsg_Received;
 			btnSend.Enabled = false;
 		}
 
@@ -27,6 +27,7 @@ namespace ProtocolTester
 		{
 			if((commObj != null) && (commObj.IsOpen))
 			{
+				commObj.SendData(txtSendMsg.Text, MsgFormat.MSG_STRING);
 				rtbLog.AppendText(txtSendMsg.Text);
 				txtSendMsg.Clear();
 			}
@@ -41,7 +42,12 @@ namespace ProtocolTester
 		{
 			if (btnConnect.Text.Equals("Connect"))
 			{
-				conForm.Visible = true;
+				ConnectForm form = new ConnectForm(commObj);
+				if(form.ShowDialog() == DialogResult.OK)
+				{
+					btnSend.Enabled = true;
+					btnConnect.Text = "Close";
+				}
 			}
 			else
 			{
@@ -52,19 +58,6 @@ namespace ProtocolTester
 				btnSend.Enabled = false;
 				btnConnect.Text = "Connect";
 			}
-		}
-
-		private bool SerialConnect(SerialPort port)
-		{
-			commObj = new SerialCom(port);
-			if (commObj.IsOpen)
-			{
-				btnSend.Enabled = true;
-				btnConnect.Text = "Close";
-				return true;
-			}
-			else
-				return false;
 		}
 
 		private void cbFormat_CheckedChanged(object sender, EventArgs e)
@@ -92,6 +85,21 @@ namespace ProtocolTester
 				}
 				txtSendMsg.Text = toAscii;
 			}
+		}
+
+		private bool PortMsg_Received(string rxMsg)
+		{
+			if(rtbLog.InvokeRequired)
+			{
+				UpdateControl uc = delegate(string text) { rtbLog.AppendText(text); };
+				Invoke(uc, new object[] { "In => " + rxMsg });
+				return true;
+			}
+			else
+			{
+				rtbLog.AppendText("In => " + rxMsg);
+			}
+			return true;
 		}
 	}
 }
