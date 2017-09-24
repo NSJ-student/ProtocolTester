@@ -13,15 +13,25 @@ namespace ProtocolTester
 	{
 		SerialPort PortInfo;
 		Thread rxThread;
-		public override event ReceiveHandler OnRecvMsg;
-		public override bool IsOpen
+		public event ReceiveHandler OnRecvMsg;
+		public event OpenCloseHandler OnOpenClose;
+		public event LogHandler OnLogAdded;
+
+		public CommType Type
+		{
+			get
+			{
+				return CommType.COMM_SERIAL;
+			}
+		}
+		public bool IsOpen
 		{
 			get
 			{
 				return (PortInfo != null) ? PortInfo.IsOpen : false;
 			}
 		}
-		public override object CurrentPort
+		public object CurrentPort
 		{
 			get
 			{
@@ -30,26 +40,32 @@ namespace ProtocolTester
 		}
 		public SerialCom()
 		{
-			comType = CommType.COMM_SERIAL;
-			PortInfo = null;
 			ThreadStart ts = new ThreadStart(ReadMsg);
 			rxThread = new Thread(ts);
+		}
+		public SerialCom(string PortName, int BaudRate)
+			: this()
+		{
+			PortInfo = new SerialPort(PortName);
+			PortInfo.BaudRate = BaudRate;
+			PortInfo.DataBits = 8;
+			PortInfo.StopBits = StopBits.One;
+			PortInfo.Parity = Parity.None;
 		}
 		public SerialCom(SerialPort port)
+			: this()
 		{
-			comType = CommType.COMM_SERIAL;
 			PortInfo = port;
-			ThreadStart ts = new ThreadStart(ReadMsg);
-			rxThread = new Thread(ts);
 		}
 
-		public override bool OpenPort(object port)
+		public bool OpenPort(object port)
 		{
 			PortInfo = port as SerialPort;
 
 			try
 			{
 				PortInfo.Open();
+				OnOpenClose(true);
 				rxThread.Start();
 				return true;
 			}
@@ -58,7 +74,7 @@ namespace ProtocolTester
 				return false;
 			}
 		}
-		public override void ClosePort()
+		public void ClosePort()
 		{
 			if(PortInfo.IsOpen)
 			{
@@ -67,10 +83,11 @@ namespace ProtocolTester
 					rxThread.Abort();
 				}
 				PortInfo.Close();
+				OnOpenClose(false);
 			}
 		}
 
-		public override bool SendData(string strMsg, MsgFormat Format)
+		public bool SendData(string strMsg, MsgFormat Format)
 		{
 			if(IsOpen)
 			{
@@ -89,7 +106,9 @@ namespace ProtocolTester
 			{
 				if(PortInfo.BytesToRead > 0)
 				{
-					string reads = PortInfo.ReadExisting();
+					byte[] reads = new byte[PortInfo.BytesToRead];
+					PortInfo.Read(reads, 0, PortInfo.BytesToRead);
+
 					OnRecvMsg(reads);
 				}
 				Thread.Sleep(10);

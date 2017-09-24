@@ -19,22 +19,19 @@ namespace ProtocolTester
 		MSG_STRING,
 		MSG_HEX
 	}
-	public delegate bool ReceiveHandler(string recvMsg);
-	public abstract class IComm
+	public delegate bool ReceiveHandler(byte[] recvMsg);
+	public delegate void OpenCloseHandler(bool IsOpen);
+	public delegate void LogHandler(object Obj, string Log);
+	public interface IComm
 	{
-		protected CommType comType;
-		public abstract event ReceiveHandler OnRecvMsg;
-		public abstract bool IsOpen { get; }
-		public abstract object CurrentPort { get; }
-		public CommType Type
-		{
-			get
-			{
-				return comType;
-			}
-		}
-		public abstract bool OpenPort(object port);
-		public abstract void ClosePort();
-		public abstract bool SendData(string strMsg, MsgFormat Format);
+		event ReceiveHandler OnRecvMsg;
+		event OpenCloseHandler OnOpenClose;
+		event LogHandler OnLogAdded;
+		bool IsOpen { get; }
+		object CurrentPort { get; }
+		CommType Type { get; }
+		bool OpenPort(object port);
+		void ClosePort();
+		bool SendData(string strMsg, MsgFormat Format);
 	}
 }

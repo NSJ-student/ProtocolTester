@@ -43,26 +43,33 @@
 			this.label5 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.cbParity = new System.Windows.Forms.ComboBox();
-			this.tpTcpServer = new System.Windows.Forms.TabPage();
-			this.tpTcpClient = new System.Windows.Forms.TabPage();
-			this.tpUDP = new System.Windows.Forms.TabPage();
+			this.tpTcp = new System.Windows.Forms.TabPage();
+			this.rbTcpClient = new System.Windows.Forms.RadioButton();
+			this.rbTcpServer = new System.Windows.Forms.RadioButton();
+			this.btnTcpConnect = new System.Windows.Forms.Button();
+			this.txtClientIP = new System.Windows.Forms.TextBox();
+			this.cbServerIP = new System.Windows.Forms.ComboBox();
+			this.lblServerIP = new System.Windows.Forms.Label();
+			this.lblClientIP = new System.Windows.Forms.Label();
+			this.txtPort = new System.Windows.Forms.TextBox();
+			this.lblPort = new System.Windows.Forms.Label();
+			this.tpUdp = new System.Windows.Forms.TabPage();
 			this.tabConnect.SuspendLayout();
 			this.tpSerial.SuspendLayout();
+			this.tpTcp.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabConnect
 			// 
 			this.tabConnect.Controls.Add(this.tpSerial);
-			this.tabConnect.Controls.Add(this.tpTcpServer);
-			this.tabConnect.Controls.Add(this.tpTcpClient);
-			this.tabConnect.Controls.Add(this.tpUDP);
+			this.tabConnect.Controls.Add(this.tpTcp);
+			this.tabConnect.Controls.Add(this.tpUdp);
 			this.tabConnect.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabConnect.Location = new System.Drawing.Point(0, 0);
 			this.tabConnect.Name = "tabConnect";
 			this.tabConnect.SelectedIndex = 0;
 			this.tabConnect.Size = new System.Drawing.Size(306, 324);
 			this.tabConnect.TabIndex = 0;
-			this.tabConnect.SelectedIndexChanged += new System.EventHandler(this.tabConnect_SelectedIndexChanged);
 			// 
 			// tpSerial
 			// 
@@ -92,7 +99,7 @@
 			this.btnSerialConnect.Location = new System.Drawing.Point(159, 245);
 			this.btnSerialConnect.Name = "btnSerialConnect";
 			this.btnSerialConnect.Size = new System.Drawing.Size(103, 29);
-			this.btnSerialConnect.TabIndex = 14;
+			this.btnSerialConnect.TabIndex = 7;
 			this.btnSerialConnect.Text = "Connect";
 			this.btnSerialConnect.UseVisualStyleBackColor = true;
 			this.btnSerialConnect.Click += new System.EventHandler(this.btnSerialConnect_Click);
@@ -100,7 +107,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(42, 28);
+			this.label1.Location = new System.Drawing.Point(42, 37);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(34, 15);
 			this.label1.TabIndex = 0;
@@ -109,7 +116,7 @@
 			// cbPort
 			// 
 			this.cbPort.FormattingEnabled = true;
-			this.cbPort.Location = new System.Drawing.Point(141, 25);
+			this.cbPort.Location = new System.Drawing.Point(141, 34);
 			this.cbPort.Name = "cbPort";
 			this.cbPort.Size = new System.Drawing.Size(121, 23);
 			this.cbPort.TabIndex = 1;
@@ -134,7 +141,7 @@
 			this.cbFlowControl.Location = new System.Drawing.Point(141, 194);
 			this.cbFlowControl.Name = "cbFlowControl";
 			this.cbFlowControl.Size = new System.Drawing.Size(121, 23);
-			this.cbFlowControl.TabIndex = 13;
+			this.cbFlowControl.TabIndex = 6;
 			// 
 			// cbSpeed
 			// 
@@ -154,7 +161,7 @@
 			this.cbSpeed.Location = new System.Drawing.Point(141, 78);
 			this.cbSpeed.Name = "cbSpeed";
 			this.cbSpeed.Size = new System.Drawing.Size(121, 23);
-			this.cbSpeed.TabIndex = 4;
+			this.cbSpeed.TabIndex = 2;
 			// 
 			// label6
 			// 
@@ -185,7 +192,7 @@
 			this.cbStopBit.Location = new System.Drawing.Point(141, 165);
 			this.cbStopBit.Name = "cbStopBit";
 			this.cbStopBit.Size = new System.Drawing.Size(121, 23);
-			this.cbStopBit.TabIndex = 11;
+			this.cbStopBit.TabIndex = 5;
 			// 
 			// cbDataBit
 			// 
@@ -199,7 +206,7 @@
 			this.cbDataBit.Location = new System.Drawing.Point(141, 107);
 			this.cbDataBit.Name = "cbDataBit";
 			this.cbDataBit.Size = new System.Drawing.Size(121, 23);
-			this.cbDataBit.TabIndex = 7;
+			this.cbDataBit.TabIndex = 3;
 			// 
 			// label5
 			// 
@@ -230,35 +237,125 @@
 			this.cbParity.Location = new System.Drawing.Point(141, 136);
 			this.cbParity.Name = "cbParity";
 			this.cbParity.Size = new System.Drawing.Size(121, 23);
-			this.cbParity.TabIndex = 9;
+			this.cbParity.TabIndex = 4;
 			// 
-			// tpTcpServer
+			// tpTcp
 			// 
-			this.tpTcpServer.Location = new System.Drawing.Point(4, 25);
-			this.tpTcpServer.Name = "tpTcpServer";
-			this.tpTcpServer.Padding = new System.Windows.Forms.Padding(3);
-			this.tpTcpServer.Size = new System.Drawing.Size(298, 295);
-			this.tpTcpServer.TabIndex = 1;
-			this.tpTcpServer.Text = "TCP Server";
-			this.tpTcpServer.UseVisualStyleBackColor = true;
+			this.tpTcp.Controls.Add(this.rbTcpClient);
+			this.tpTcp.Controls.Add(this.rbTcpServer);
+			this.tpTcp.Controls.Add(this.btnTcpConnect);
+			this.tpTcp.Controls.Add(this.txtClientIP);
+			this.tpTcp.Controls.Add(this.cbServerIP);
+			this.tpTcp.Controls.Add(this.lblServerIP);
+			this.tpTcp.Controls.Add(this.lblClientIP);
+			this.tpTcp.Controls.Add(this.txtPort);
+			this.tpTcp.Controls.Add(this.lblPort);
+			this.tpTcp.Location = new System.Drawing.Point(4, 25);
+			this.tpTcp.Name = "tpTcp";
+			this.tpTcp.Padding = new System.Windows.Forms.Padding(3);
+			this.tpTcp.Size = new System.Drawing.Size(298, 295);
+			this.tpTcp.TabIndex = 1;
+			this.tpTcp.Text = "TCP";
+			this.tpTcp.UseVisualStyleBackColor = true;
 			// 
-			// tpTcpClient
+			// rbTcpClient
 			// 
-			this.tpTcpClient.Location = new System.Drawing.Point(4, 25);
-			this.tpTcpClient.Name = "tpTcpClient";
-			this.tpTcpClient.Size = new System.Drawing.Size(298, 295);
-			this.tpTcpClient.TabIndex = 3;
-			this.tpTcpClient.Text = "TCP Client";
-			this.tpTcpClient.UseVisualStyleBackColor = true;
+			this.rbTcpClient.AutoSize = true;
+			this.rbTcpClient.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.rbTcpClient.Location = new System.Drawing.Point(229, 104);
+			this.rbTcpClient.Name = "rbTcpClient";
+			this.rbTcpClient.Size = new System.Drawing.Size(47, 35);
+			this.rbTcpClient.TabIndex = 2;
+			this.rbTcpClient.Text = "Client";
+			this.rbTcpClient.UseVisualStyleBackColor = true;
+			this.rbTcpClient.Click += new System.EventHandler(this.rbTcpClient_Click);
 			// 
-			// tpUDP
+			// rbTcpServer
 			// 
-			this.tpUDP.Location = new System.Drawing.Point(4, 25);
-			this.tpUDP.Name = "tpUDP";
-			this.tpUDP.Size = new System.Drawing.Size(298, 295);
-			this.tpUDP.TabIndex = 2;
-			this.tpUDP.Text = "UDP";
-			this.tpUDP.UseVisualStyleBackColor = true;
+			this.rbTcpServer.AutoSize = true;
+			this.rbTcpServer.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
+			this.rbTcpServer.Checked = true;
+			this.rbTcpServer.Location = new System.Drawing.Point(226, 52);
+			this.rbTcpServer.Name = "rbTcpServer";
+			this.rbTcpServer.Size = new System.Drawing.Size(53, 35);
+			this.rbTcpServer.TabIndex = 1;
+			this.rbTcpServer.TabStop = true;
+			this.rbTcpServer.Text = "Server";
+			this.rbTcpServer.UseVisualStyleBackColor = true;
+			this.rbTcpServer.Click += new System.EventHandler(this.rbTcpServer_Click);
+			// 
+			// btnTcpConnect
+			// 
+			this.btnTcpConnect.Location = new System.Drawing.Point(159, 245);
+			this.btnTcpConnect.Name = "btnTcpConnect";
+			this.btnTcpConnect.Size = new System.Drawing.Size(103, 29);
+			this.btnTcpConnect.TabIndex = 6;
+			this.btnTcpConnect.Text = "Connect";
+			this.btnTcpConnect.UseVisualStyleBackColor = true;
+			this.btnTcpConnect.Click += new System.EventHandler(this.btnTcpConnect_Click);
+			// 
+			// txtClientIP
+			// 
+			this.txtClientIP.Location = new System.Drawing.Point(102, 114);
+			this.txtClientIP.Name = "txtClientIP";
+			this.txtClientIP.Size = new System.Drawing.Size(100, 25);
+			this.txtClientIP.TabIndex = 4;
+			// 
+			// cbServerIP
+			// 
+			this.cbServerIP.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbServerIP.FormattingEnabled = true;
+			this.cbServerIP.Items.AddRange(new object[] {
+            "0.0.0.0 (Any)",
+            "127.0.0.1 (Loopback)",
+            "172.30.1.9"});
+			this.cbServerIP.Location = new System.Drawing.Point(102, 64);
+			this.cbServerIP.Name = "cbServerIP";
+			this.cbServerIP.Size = new System.Drawing.Size(100, 23);
+			this.cbServerIP.TabIndex = 3;
+			// 
+			// lblServerIP
+			// 
+			this.lblServerIP.AutoSize = true;
+			this.lblServerIP.Location = new System.Drawing.Point(19, 67);
+			this.lblServerIP.Name = "lblServerIP";
+			this.lblServerIP.Size = new System.Drawing.Size(77, 15);
+			this.lblServerIP.TabIndex = 3;
+			this.lblServerIP.Text = "Server IP: ";
+			// 
+			// lblClientIP
+			// 
+			this.lblClientIP.AutoSize = true;
+			this.lblClientIP.Location = new System.Drawing.Point(19, 117);
+			this.lblClientIP.Name = "lblClientIP";
+			this.lblClientIP.Size = new System.Drawing.Size(66, 15);
+			this.lblClientIP.TabIndex = 2;
+			this.lblClientIP.Text = "Client IP:";
+			// 
+			// txtPort
+			// 
+			this.txtPort.Location = new System.Drawing.Point(102, 165);
+			this.txtPort.Name = "txtPort";
+			this.txtPort.Size = new System.Drawing.Size(100, 25);
+			this.txtPort.TabIndex = 5;
+			// 
+			// lblPort
+			// 
+			this.lblPort.AutoSize = true;
+			this.lblPort.Location = new System.Drawing.Point(19, 168);
+			this.lblPort.Name = "lblPort";
+			this.lblPort.Size = new System.Drawing.Size(44, 15);
+			this.lblPort.TabIndex = 0;
+			this.lblPort.Text = "Port: ";
+			// 
+			// tpUdp
+			// 
+			this.tpUdp.Location = new System.Drawing.Point(4, 25);
+			this.tpUdp.Name = "tpUdp";
+			this.tpUdp.Size = new System.Drawing.Size(298, 295);
+			this.tpUdp.TabIndex = 2;
+			this.tpUdp.Text = "UDP";
+			this.tpUdp.UseVisualStyleBackColor = true;
 			// 
 			// ConnectForm
 			// 
@@ -274,6 +371,8 @@
 			this.tabConnect.ResumeLayout(false);
 			this.tpSerial.ResumeLayout(false);
 			this.tpSerial.PerformLayout();
+			this.tpTcp.ResumeLayout(false);
+			this.tpTcp.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -282,9 +381,7 @@
 
 		private System.Windows.Forms.TabControl tabConnect;
 		private System.Windows.Forms.TabPage tpSerial;
-		private System.Windows.Forms.TabPage tpTcpServer;
-		private System.Windows.Forms.TabPage tpUDP;
-		private System.Windows.Forms.TabPage tpTcpClient;
+		private System.Windows.Forms.TabPage tpTcp;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ComboBox cbPort;
 		private System.Windows.Forms.Label label2;
@@ -298,5 +395,15 @@
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.ComboBox cbFlowControl;
 		private System.Windows.Forms.Button btnSerialConnect;
+		private System.Windows.Forms.TextBox txtPort;
+		private System.Windows.Forms.Label lblPort;
+		private System.Windows.Forms.TextBox txtClientIP;
+		private System.Windows.Forms.ComboBox cbServerIP;
+		private System.Windows.Forms.Label lblServerIP;
+		private System.Windows.Forms.Label lblClientIP;
+		private System.Windows.Forms.Button btnTcpConnect;
+		private System.Windows.Forms.TabPage tpUdp;
+		private System.Windows.Forms.RadioButton rbTcpClient;
+		private System.Windows.Forms.RadioButton rbTcpServer;
 	}
 }
