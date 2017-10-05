@@ -430,14 +430,14 @@ namespace ProtocolTester
 			{
 				Color oldColor = rtbLog.SelectionColor;
 				rtbLog.SelectionColor = Color.Red;
-				rtbLog.AppendText("\n** To ASCII **\n");
+				rtbLog.AppendText("** To ASCII **\n");
 				rtbLog.SelectionColor = oldColor;
 			}
 			else
 			{
 				Color oldColor = rtbLog.SelectionColor;
 				rtbLog.SelectionColor = Color.Red;
-				rtbLog.AppendText("\n** To Hex **\n");
+				rtbLog.AppendText("** To Hex **\n");
 				rtbLog.SelectionColor = oldColor;
 			}
 		}

@@ -49,6 +49,8 @@
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnDown = new System.Windows.Forms.Button();
 			this.btnUp = new System.Windows.Forms.Button();
+			this.lblCycle = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dgvSchedule)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -151,6 +153,8 @@
 			// 
 			this.flowLayoutPanel2.Controls.Add(this.btnStart);
 			this.flowLayoutPanel2.Controls.Add(this.btnStop);
+			this.flowLayoutPanel2.Controls.Add(this.lblCycle);
+			this.flowLayoutPanel2.Controls.Add(this.label1);
 			this.flowLayoutPanel2.Controls.Add(this.lblTime);
 			resources.ApplyResources(this.flowLayoutPanel2, "flowLayoutPanel2");
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
@@ -216,6 +220,16 @@
 			this.btnUp.UseVisualStyleBackColor = true;
 			this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
 			// 
+			// lblCycle
+			// 
+			resources.ApplyResources(this.lblCycle, "lblCycle");
+			this.lblCycle.Name = "lblCycle";
+			// 
+			// label1
+			// 
+			resources.ApplyResources(this.label1, "label1");
+			this.label1.Name = "label1";
+			// 
 			// CommScheduler
 			// 
 			resources.ApplyResources(this, "$this");
@@ -260,5 +274,7 @@
 		private System.Windows.Forms.DataGridViewCheckBoxColumn cEnable;
 		private System.Windows.Forms.DataGridViewButtonColumn cSend;
 		private System.Windows.Forms.Label lblTime;
+		private System.Windows.Forms.Label lblCycle;
+		private System.Windows.Forms.Label label1;
 	}
 }

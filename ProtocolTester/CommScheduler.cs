@@ -15,6 +15,7 @@ namespace ProtocolTester
 	public delegate void HandleControl();
 	public partial class CommScheduler : Form
 	{
+		private bool TerminateThread;
 		public SendMsg SendstrMsg;
 		Thread ScheduleTask;
 		public enum TypeNum
@@ -35,6 +36,7 @@ namespace ProtocolTester
 		/// <param name="e"></param>
 		private void btnStart_Click(object sender, EventArgs e)
 		{
+			TerminateThread = false;
 			ScheduleTask = new Thread(new ThreadStart(PlaySchedule));
 			ScheduleTask.Start();
 			btnStart.Enabled = false;
@@ -42,9 +44,19 @@ namespace ProtocolTester
 		}
 		private void btnStop_Click(object sender, EventArgs e)
 		{
-			ScheduleTask.Abort();
 			btnStart.Enabled = true;
 			btnStop.Enabled = false;
+			TerminateThread = true;
+			ScheduleTask.Join(100);
+			if (ScheduleTask.IsAlive)
+			{
+				ScheduleTask.Abort();
+				Text = "Schedule - Aborted";
+			}
+			else
+			{
+				Text = "Schedule - Stopped";
+			}
 		}
 
 		/// <summary>
@@ -127,7 +139,17 @@ namespace ProtocolTester
 			e.Cancel = true;
 			if(ScheduleTask != null && ScheduleTask.IsAlive)
 			{
-				ScheduleTask.Abort();
+				TerminateThread = true;
+				ScheduleTask.Join(100);
+				if (ScheduleTask.IsAlive)
+				{
+					ScheduleTask.Abort();
+					Text = "Schedule - Aborted";
+				}
+				else
+				{
+					Text = "Schedule - Stopped";
+				}
 			}
 			Hide();
 		}
@@ -143,6 +165,7 @@ namespace ProtocolTester
 			{
 				if(e.RowIndex >= 0)
 				{
+					TerminateThread = false;
 					ThreadStart ts = new ThreadStart(ExecuteSingleRow);
 					ScheduleTask = new Thread(ts);
 					ScheduleTask.Start();
@@ -221,7 +244,6 @@ namespace ProtocolTester
 				if(!IsDisposed)
 					Invoke(new HandleControl(delegate {
 						dgvSchedule.BackgroundColor = Color.IndianRed;
-						Text = "Schedule - Aborted";
 					}));
 			}
 			finally
@@ -271,7 +293,6 @@ namespace ProtocolTester
 				if (!IsDisposed)
 					Invoke(new HandleControl(delegate {
 						dgvSchedule.BackgroundColor = Color.IndianRed;
-						Text = "Schedule - Aborted";
 					}));
 			}
 			finally
@@ -294,6 +315,9 @@ namespace ProtocolTester
 			if (row.Cells["cType"].Value.Equals("SEND"))
 			{
 				int cycle = Convert.ToInt32((string)row.Cells["cCycle"].Value);
+				Invoke(new Action(delegate () {
+					lblCycle.Text = "0";
+				}));
 				for (int i = 0; i < cycle; i++)
 				{
 					if (!SendstrMsg((string)row.Cells["cValue"].Value, (bool)row.Cells["cFormat"].Value))
@@ -310,6 +334,10 @@ namespace ProtocolTester
 					{
 						return false;
 					}
+
+					Invoke(new Action(delegate () {
+						lblCycle.Text = (i+1).ToString();
+					}));
 				}
 			}
 			else if (row.Cells["cType"].Value.Equals("DELAY"))
@@ -344,6 +372,10 @@ namespace ProtocolTester
 			while (AfterWards >= ThisMoment)
 			{
 				Application.DoEvents();
+				if(TerminateThread)
+				{
+					throw new Exception("Terminate Thread");
+				}
 				ThisMoment = DateTime.Now;
 				if(ThisMoment.Subtract(PrevMoment) >= period)
 				{
