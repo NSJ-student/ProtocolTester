@@ -178,5 +178,67 @@ namespace ProtocolTester
 				OnLogAdded(this, "*** Rx Error : " + es.Message);
 			}
 		}
+
+		public bool LoadInit()
+		{
+			try
+			{
+				if (File.Exists(".\\Init.txt"))
+				{
+					StreamReader reader = new StreamReader(".\\Init.txt");
+					IPAddress ip = null;
+					int port = 0;
+					string line;
+					while ((line = reader.ReadLine()) != null)
+					{
+						string[] spt = line.Split(new char[] { ' ', '=' }, StringSplitOptions.RemoveEmptyEntries);
+						if (spt.Length == 2)
+						{
+							if (spt[0].Equals("ServerIP")) ip = IPAddress.Parse(spt[1]);
+							if (spt[0].Equals("ServerPort")) port = Convert.ToInt32(spt[1]);
+						}
+					}
+
+					if((ip!= null) && (port != 0))
+					{
+						ServerIP = new IPEndPoint(ip, port);
+					}
+					reader.Close();
+					return true;
+				}
+				return false;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public bool SaveInit()
+		{
+			if (File.Exists(".\\Init.txt"))
+			{
+				if(ServerIP != null)
+				{
+					StreamWriter writer = new StreamWriter(".\\Init.txt", true);
+					try
+					{
+						writer.WriteLine();
+						writer.WriteLine("### Server NetInfo");
+						writer.WriteLine();
+						writer.WriteLine("ServerIP=" + ServerIP.Address.ToString());
+						writer.WriteLine("ServerPort=" + ServerIP.Port.ToString());
+						writer.Close();
+					}
+					catch
+					{
+						writer.Close();
+						return false;
+					}
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 }

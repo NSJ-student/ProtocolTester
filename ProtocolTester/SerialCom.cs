@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Windows.Forms;
 using System.Threading;
+using System.IO;
 
 namespace ProtocolTester
 {
@@ -114,6 +115,70 @@ namespace ProtocolTester
 				}
 				Thread.Sleep(10);
 			}
+		}
+
+		public bool LoadInit()
+		{
+			try
+			{
+				if (File.Exists(".\\Init.txt"))
+				{
+					StreamReader reader = new StreamReader(".\\Init.txt");
+					string line;
+					while ((line = reader.ReadLine()) != null)
+					{
+						string[] spt = line.Split(new char[] { ' ', '=' }, StringSplitOptions.RemoveEmptyEntries);
+						if (spt.Length == 2)
+						{
+							if (PortInfo == null)
+								PortInfo = new SerialPort();
+
+							if (spt[0].Equals("PortName"))	PortInfo.PortName = spt[1];
+							if (spt[0].Equals("BaudRate"))	PortInfo.BaudRate = Convert.ToInt32(spt[1]);
+							if (spt[0].Equals("Parity"))	PortInfo.Parity = (Parity)Convert.ToInt32(spt[1]);
+							if (spt[0].Equals("StopBits"))	PortInfo.StopBits = (StopBits)Convert.ToInt32(spt[1]);
+							if (spt[0].Equals("DataBits"))	PortInfo.DataBits = Convert.ToInt32(spt[1]);
+						}
+					}
+					reader.Close();
+					return true;
+				}
+				return false;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		public bool SaveInit()
+		{
+			if (File.Exists(".\\Init.txt"))
+			{
+				if (PortInfo != null)
+				{
+					StreamWriter writer = new StreamWriter(".\\Init.txt", true);
+					try
+					{
+						writer.WriteLine();
+						writer.WriteLine("### Serial PortInfo");
+						writer.WriteLine();
+						writer.WriteLine("PortName=" + PortInfo.PortName);
+						writer.WriteLine("BaudRate=" + PortInfo.BaudRate.ToString());
+						writer.WriteLine("Parity=" + PortInfo.Parity.ToString());
+						writer.WriteLine("StopBits=" + PortInfo.StopBits.ToString());
+						writer.WriteLine("DataBits=" + PortInfo.DataBits.ToString());
+						writer.Close();
+					}
+					catch
+					{
+						writer.Close();
+						return false;
+					}
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

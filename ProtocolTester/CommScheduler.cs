@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.IO;
 
 namespace ProtocolTester
 {
@@ -220,6 +221,7 @@ namespace ProtocolTester
 				if(!IsDisposed)
 					Invoke(new HandleControl(delegate {
 						dgvSchedule.BackgroundColor = Color.IndianRed;
+						Text = "Schedule - Aborted";
 					}));
 			}
 			finally
@@ -269,6 +271,7 @@ namespace ProtocolTester
 				if (!IsDisposed)
 					Invoke(new HandleControl(delegate {
 						dgvSchedule.BackgroundColor = Color.IndianRed;
+						Text = "Schedule - Aborted";
 					}));
 			}
 			finally
@@ -356,6 +359,86 @@ namespace ProtocolTester
 			}
 
 			return DateTime.Now;
+		}
+
+		/// <summary>
+		/// 스케줄 표 저장/불러오기
+		/// </summary>
+		public void LoadInit()
+		{
+			try
+			{
+				if (File.Exists(".\\Init.txt"))
+				{
+					StreamReader reader = new StreamReader(".\\Init.txt");
+					string line;
+					while ((line = reader.ReadLine()) != null)
+					{
+						if(line.Equals("# Item"))
+						{
+							int index = dgvSchedule.Rows.Add();
+							DataGridViewRow row = dgvSchedule.Rows[index];
+
+							for (int cnt=0; cnt<8; cnt++)
+							{
+								line = reader.ReadLine();
+								string[] spt = line.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries);
+								if (spt.Length == 2)
+								{
+									if (spt[0].Equals("cType")) row.Cells["cType"].Value = spt[1];
+									else if (spt[0].Equals("cFormat")) row.Cells["cFormat"].Value = Convert.ToBoolean(spt[1]);
+									else if (spt[0].Equals("cName")) row.Cells["cName"].Value = spt[1];
+									else if (spt[0].Equals("cValue")) row.Cells["cValue"].Value = spt[1];
+									else if (spt[0].Equals("cCycle")) row.Cells["cCycle"].Value = spt[1];
+									else if (spt[0].Equals("cDelayMs")) row.Cells["cDelayMs"].Value = spt[1];
+									else if (spt[0].Equals("cEnable")) row.Cells["cEnable"].Value = Convert.ToBoolean(spt[1]);
+									else if (spt[0].Equals("cSend")) row.Cells["cSend"].Value = spt[1];
+									else break;
+								}
+								else
+								{
+									break;
+								}
+							}
+						}
+					}
+					reader.Close();
+				}
+			}
+			catch
+			{
+
+			}
+		}
+		public void SaveInit()
+		{
+			if (File.Exists(".\\Init.txt"))
+			{
+				StreamWriter writer = new StreamWriter(".\\Init.txt", true);
+				try
+				{
+					writer.WriteLine();
+					writer.WriteLine("### Scheculer");
+					writer.WriteLine();
+					foreach (DataGridViewRow row in dgvSchedule.Rows)
+					{
+						writer.WriteLine("# Item");
+						writer.WriteLine("cType=" + row.Cells["cType"].Value.ToString());
+						writer.WriteLine("cFormat=" + row.Cells["cFormat"].Value.ToString());
+						writer.WriteLine("cName=" + row.Cells["cName"].Value.ToString());
+						writer.WriteLine("cValue=" + row.Cells["cValue"].Value.ToString());
+						writer.WriteLine("cCycle=" + row.Cells["cCycle"].Value.ToString());
+						writer.WriteLine("cDelayMs=" + row.Cells["cDelayMs"].Value.ToString());
+						writer.WriteLine("cEnable=" + row.Cells["cEnable"].Value.ToString());
+						writer.WriteLine("cSend=" + row.Cells["cSend"].Value.ToString());
+					}
+					writer.Close();
+				}
+				catch
+				{
+					writer.Close();
+				}
+			}
 		}
 	}
 }

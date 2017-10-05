@@ -29,13 +29,17 @@ namespace ProtocolTester
 			AppStartTime = DateTime.Now;
 
 			commSchedule = new CommScheduler(Port_Send);
+			commSchedule.LoadInit();
 
 			commSettings = new CommSettings();
+			commSettings.LoadInit();
 
 			commObj = new PortObjects();
 			commObj.OnRecvMsg += UpdateUI_Receive;
 			commObj.OnOpenClose += UpdateUI_OpenClose;
 			commObj.OnLogAdded += UpdateUI_Log;
+			commObj.LoadInit();
+
 			btnSend.Enabled = false;
 		}
 		
@@ -392,6 +396,10 @@ namespace ProtocolTester
 		/// <param name="e"></param>
 		private void Form1_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			File.Create(".\\Init.txt").Close();
+			commSchedule.SaveInit();
+			commSettings.SaveInit();
+			commObj.SaveInit();
 			if (btnConnect.Text.Equals("Close"))
 			{
 				if ((commObj != null) && (commObj.IsOpen))

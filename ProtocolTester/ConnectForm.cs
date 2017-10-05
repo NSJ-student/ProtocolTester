@@ -85,7 +85,6 @@ namespace ProtocolTester
 				cbStopBit.SelectedIndex = 0;
 				cbDataBit.SelectedIndex = 3;
 			}
-			cbStopBit.SelectedIndex = 0;
 			cbFlowControl.SelectedIndex = 0;
 
 			// Update Tcp Tab - Server
@@ -102,7 +101,7 @@ namespace ProtocolTester
 			if (clientport != null)
 			{
 				txtClientIP.Text = clientport.Address.ToString();
-				if (rbTcpClient.Checked)
+				if (rbTcpClient.Checked || txtPort.Text.Equals(""))
 					txtPort.Text = clientport.Port.ToString();
 			}
 

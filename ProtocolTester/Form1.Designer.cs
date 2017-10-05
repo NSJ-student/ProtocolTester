@@ -68,7 +68,6 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel1.Controls.Add(this.rtbLog, 1, 2);
-			this.tableLayoutPanel1.Controls.Add(this.btnSettings, 6, 1);
 			this.tableLayoutPanel1.Controls.Add(this.lblSend, 1, 4);
 			this.tableLayoutPanel1.Controls.Add(this.btnLogClear, 6, 3);
 			this.tableLayoutPanel1.Controls.Add(this.lblStartMsg, 3, 6);
@@ -79,8 +78,9 @@
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 3);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 6);
 			this.tableLayoutPanel1.Controls.Add(this.btnConnect, 1, 1);
-			this.tableLayoutPanel1.Controls.Add(this.btnShortKey, 4, 1);
 			this.tableLayoutPanel1.Controls.Add(this.txtSendMsg, 1, 5);
+			this.tableLayoutPanel1.Controls.Add(this.btnShortKey, 3, 1);
+			this.tableLayoutPanel1.Controls.Add(this.btnSettings, 5, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -112,9 +112,10 @@
 			// btnSettings
 			// 
 			this.btnSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnSettings.Location = new System.Drawing.Point(495, 13);
+			this.tableLayoutPanel1.SetColumnSpan(this.btnSettings, 2);
+			this.btnSettings.Location = new System.Drawing.Point(445, 13);
 			this.btnSettings.Name = "btnSettings";
-			this.btnSettings.Size = new System.Drawing.Size(74, 23);
+			this.btnSettings.Size = new System.Drawing.Size(124, 23);
 			this.btnSettings.TabIndex = 11;
 			this.btnSettings.Text = "Settings";
 			this.btnSettings.UseVisualStyleBackColor = true;
@@ -302,11 +303,12 @@
 			// btnShortKey
 			// 
 			this.btnShortKey.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnShortKey.Location = new System.Drawing.Point(365, 13);
+			this.tableLayoutPanel1.SetColumnSpan(this.btnShortKey, 2);
+			this.btnShortKey.Location = new System.Drawing.Point(315, 13);
 			this.btnShortKey.Name = "btnShortKey";
-			this.btnShortKey.Size = new System.Drawing.Size(74, 23);
+			this.btnShortKey.Size = new System.Drawing.Size(124, 23);
 			this.btnShortKey.TabIndex = 12;
-			this.btnShortKey.Text = "Short Key";
+			this.btnShortKey.Text = "Schedule";
 			this.btnShortKey.UseVisualStyleBackColor = true;
 			this.btnShortKey.Click += new System.EventHandler(this.btnShortKey_Click);
 			// 

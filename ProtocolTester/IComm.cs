@@ -33,5 +33,7 @@ namespace ProtocolTester
 		bool OpenPort(object port);
 		void ClosePort();
 		bool SendData(byte[] Msg, MsgFormat Format);
+		bool LoadInit();
+		bool SaveInit();
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ProtocolTester
 {
@@ -40,6 +41,62 @@ namespace ProtocolTester
 			RxSymbol = setting.RxSymbol;
 			TxSymbol = setting.TxSymbol;
 			ShowTxRxTime = setting.ShowTxRxTime;
+		}
+
+		public void LoadInit()
+		{
+			try
+			{
+				if(File.Exists(".\\Init.txt"))
+				{
+					StreamReader reader = new StreamReader(".\\Init.txt");
+					string line;
+					while ((line = reader.ReadLine()) != null)
+					{
+						string[] spt = line.Split(new char[] { ' ', '=' }, StringSplitOptions.RemoveEmptyEntries);
+						if(spt.Length == 2)
+						{
+							if (spt[0].Equals("AutoLineFeed")) AutoLineFeed = Convert.ToBoolean(spt[1]);
+							if (spt[0].Equals("AutoScroll")) AutoScroll = Convert.ToBoolean(spt[1]);
+							if (spt[0].Equals("LineFeedOnEnd")) LineFeedOnEnd = Convert.ToBoolean(spt[1]);
+							if (spt[0].Equals("ShowTxRxSymbol")) ShowTxRxSymbol = Convert.ToBoolean(spt[1]);
+							if (spt[0].Equals("ShowTxRxTime")) ShowTxRxTime = Convert.ToInt32(spt[1]);
+							if (spt[0].Equals("RxSymbol")) RxSymbol = spt[1];
+							if (spt[0].Equals("TxSymbol")) TxSymbol = spt[1];
+						}
+					}
+					reader.Close();
+				}
+			}
+			catch
+			{
+
+			}
+		}
+		public void SaveInit()
+		{
+			if (File.Exists(".\\Init.txt"))
+			{
+				StreamWriter writer = new StreamWriter(".\\Init.txt", true);
+				try
+				{
+					writer.WriteLine();
+					writer.WriteLine("### Setting");
+					writer.WriteLine();
+					writer.WriteLine("AutoLineFeed="+ AutoLineFeed.ToString());
+					writer.WriteLine("AutoScroll=" + AutoScroll.ToString());
+					writer.WriteLine("LineFeedOnEnd=" + LineFeedOnEnd.ToString());
+					writer.WriteLine("ShowTxRxSymbol=" + ShowTxRxSymbol.ToString());
+					writer.WriteLine("ShowTxRxTime=" + ShowTxRxTime.ToString());
+					writer.WriteLine("RxSymbol=" + RxSymbol);
+					writer.WriteLine("TxSymbol=" + TxSymbol);
+					writer.Close();
+				}
+				catch
+				{
+					writer.Close();
+				}
+			}
 		}
 	}
 }

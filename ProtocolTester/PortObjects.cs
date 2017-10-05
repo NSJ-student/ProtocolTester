@@ -124,5 +124,21 @@ namespace ProtocolTester
 		{
 			OnLogAdded(Obj, Log);
 		}
+
+		public bool LoadInit()
+		{
+			bool ret1 = SerialComPort.LoadInit();
+			bool ret2 = TcpClientComPort.LoadInit();
+			bool ret3 = TcpServerComPort.LoadInit();
+			return ret1 && ret2 && ret3;
+		}
+
+		public bool SaveInit()
+		{
+			bool ret1 = SerialComPort.SaveInit();
+			bool ret2 = TcpClientComPort.SaveInit();
+			bool ret3 = TcpServerComPort.SaveInit();
+			return ret1 && ret2 && ret3; ;
+		}
 	}
 }
