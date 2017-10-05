@@ -37,7 +37,6 @@
 			this.txtStartMsg = new System.Windows.Forms.TextBox();
 			this.lblEndMsg = new System.Windows.Forms.Label();
 			this.txtEndMsg = new System.Windows.Forms.TextBox();
-			this.txtSendMsg = new System.Windows.Forms.TextBox();
 			this.btnSend = new System.Windows.Forms.Button();
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.lblRxFormat = new System.Windows.Forms.Label();
@@ -49,6 +48,7 @@
 			this.rbSendASCII = new System.Windows.Forms.RadioButton();
 			this.btnConnect = new System.Windows.Forms.Button();
 			this.btnShortKey = new System.Windows.Forms.Button();
+			this.txtSendMsg = new System.Windows.Forms.MaskedTextBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -75,12 +75,12 @@
 			this.tableLayoutPanel1.Controls.Add(this.txtStartMsg, 4, 6);
 			this.tableLayoutPanel1.Controls.Add(this.lblEndMsg, 5, 6);
 			this.tableLayoutPanel1.Controls.Add(this.txtEndMsg, 6, 6);
-			this.tableLayoutPanel1.Controls.Add(this.txtSendMsg, 1, 5);
 			this.tableLayoutPanel1.Controls.Add(this.btnSend, 6, 5);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 3);
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 6);
 			this.tableLayoutPanel1.Controls.Add(this.btnConnect, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.btnShortKey, 4, 1);
+			this.tableLayoutPanel1.Controls.Add(this.txtSendMsg, 1, 5);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -160,6 +160,7 @@
 			this.txtStartMsg.Name = "txtStartMsg";
 			this.txtStartMsg.Size = new System.Drawing.Size(74, 25);
 			this.txtStartMsg.TabIndex = 9;
+			this.txtStartMsg.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtStartMsg_KeyPress);
 			// 
 			// lblEndMsg
 			// 
@@ -179,16 +180,7 @@
 			this.txtEndMsg.Name = "txtEndMsg";
 			this.txtEndMsg.Size = new System.Drawing.Size(74, 25);
 			this.txtEndMsg.TabIndex = 10;
-			// 
-			// txtSendMsg
-			// 
-			this.txtSendMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.tableLayoutPanel1.SetColumnSpan(this.txtSendMsg, 5);
-			this.txtSendMsg.Location = new System.Drawing.Point(13, 486);
-			this.txtSendMsg.Name = "txtSendMsg";
-			this.txtSendMsg.Size = new System.Drawing.Size(476, 25);
-			this.txtSendMsg.TabIndex = 2;
-			this.txtSendMsg.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSendMsg_KeyUp);
+			this.txtEndMsg.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtEndMsg_KeyPress);
 			// 
 			// btnSend
 			// 
@@ -233,7 +225,7 @@
 			this.rbRxMsgHex.TabIndex = 15;
 			this.rbRxMsgHex.Text = "Hex";
 			this.rbRxMsgHex.UseVisualStyleBackColor = true;
-			this.rbRxMsgHex.Click += new System.EventHandler(this.rbRxMsgHex_Click);
+			this.rbRxMsgHex.CheckedChanged += new System.EventHandler(this.rbRxMsgHex_CheckedChanged);
 			// 
 			// rbRxMsgASCII
 			// 
@@ -247,7 +239,6 @@
 			this.rbRxMsgASCII.TabStop = true;
 			this.rbRxMsgASCII.Text = "ASCII";
 			this.rbRxMsgASCII.UseVisualStyleBackColor = true;
-			this.rbRxMsgASCII.Click += new System.EventHandler(this.rbRxMsgASCII_Click);
 			// 
 			// flowLayoutPanel2
 			// 
@@ -282,7 +273,7 @@
 			this.rbSendHex.TabStop = true;
 			this.rbSendHex.Text = "Hex";
 			this.rbSendHex.UseVisualStyleBackColor = true;
-			this.rbSendHex.Click += new System.EventHandler(this.rbSendHex_Click);
+			this.rbSendHex.CheckedChanged += new System.EventHandler(this.rbSendHex_CheckedChanged);
 			// 
 			// rbSendASCII
 			// 
@@ -296,7 +287,6 @@
 			this.rbSendASCII.TabStop = true;
 			this.rbSendASCII.Text = "ASCII";
 			this.rbSendASCII.UseVisualStyleBackColor = true;
-			this.rbSendASCII.Click += new System.EventHandler(this.rbSendASCII_Click);
 			// 
 			// btnConnect
 			// 
@@ -318,6 +308,18 @@
 			this.btnShortKey.TabIndex = 12;
 			this.btnShortKey.Text = "Short Key";
 			this.btnShortKey.UseVisualStyleBackColor = true;
+			this.btnShortKey.Click += new System.EventHandler(this.btnShortKey_Click);
+			// 
+			// txtSendMsg
+			// 
+			this.txtSendMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+			this.tableLayoutPanel1.SetColumnSpan(this.txtSendMsg, 5);
+			this.txtSendMsg.Location = new System.Drawing.Point(13, 486);
+			this.txtSendMsg.Name = "txtSendMsg";
+			this.txtSendMsg.Size = new System.Drawing.Size(476, 25);
+			this.txtSendMsg.TabIndex = 21;
+			this.txtSendMsg.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSendMsg_KeyPress);
+			this.txtSendMsg.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSendMsg_KeyUp);
 			// 
 			// Form1
 			// 
@@ -325,9 +327,10 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(582, 553);
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.MinimumSize = new System.Drawing.Size(600, 600);
+			this.MinimumSize = new System.Drawing.Size(600, 400);
 			this.Name = "Form1";
 			this.Text = "Tester";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel1.ResumeLayout(false);
@@ -343,7 +346,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Button btnConnect;
 		private System.Windows.Forms.RichTextBox rtbLog;
-		private System.Windows.Forms.TextBox txtSendMsg;
 		private System.Windows.Forms.Label lblSend;
 		private System.Windows.Forms.Button btnSend;
 		private System.Windows.Forms.Button btnLogClear;
@@ -361,6 +363,7 @@
 		private System.Windows.Forms.RadioButton rbSendHex;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+		private System.Windows.Forms.MaskedTextBox txtSendMsg;
 	}
 }
 

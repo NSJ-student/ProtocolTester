@@ -32,6 +32,6 @@ namespace ProtocolTester
 		CommType Type { get; }
 		bool OpenPort(object port);
 		void ClosePort();
-		bool SendData(string strMsg, MsgFormat Format);
+		bool SendData(byte[] Msg, MsgFormat Format);
 	}
 }

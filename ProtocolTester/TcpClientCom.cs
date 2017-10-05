@@ -92,12 +92,12 @@ namespace ProtocolTester
 				OnLogAdded(this, "*** Close Error : " + es.Message);
 			}
 		}
-		public bool SendData(string strMsg, MsgFormat Format)
+		public bool SendData(byte[] Msg, MsgFormat Format)
 		{
 			if (IsOpen)
 			{
-				byte[] sendData = Encoding.Default.GetBytes(strMsg);
-				ClientSock.Send(sendData);
+				//byte[] sendData = Encoding.Default.GetBytes(strMsg);
+				ClientSock.Send(Msg);
 				return true;
 			}
 			else
@@ -111,19 +111,20 @@ namespace ProtocolTester
 			{
 				while (IsOpen)
 				{
-					byte[] data = new byte[ClientSock.ReceiveBufferSize];
 					if (ClientSock.Available > 0)
-						OnLogAdded(this, ":" + ClientSock.Available.ToString() + ":");
-					int rxLength = ClientSock.Receive(data);
-					OnLogAdded(this, "*" + rxLength.ToString() + "*");
-					if (rxLength == 0)
 					{
-						ClientSock.Disconnect(false);
-						ClientSock.Close();
-						break;
-					}
+						byte[] data = new byte[ClientSock.Available];
+						int rxLength = ClientSock.Receive(data);
+						if (rxLength == 0)
+						{
+							ClientSock.Disconnect(false);
+							ClientSock.Close();
+							OnOpenClose(false);
+							break;
+						}
 
-					OnRecvMsg(data);
+						OnRecvMsg(data);
+					}
 					Thread.Sleep(10);
 				}
 				OnLogAdded(this, "*** Rx End ***");

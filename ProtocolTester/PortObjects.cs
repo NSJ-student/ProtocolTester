@@ -102,12 +102,12 @@ namespace ProtocolTester
 			}
 		}
 
-		public bool SendData(string strMsg, MsgFormat Format)
+		public bool SendData(byte[] Msg, MsgFormat Format)
 		{
 			bool ret = false;
 
 			if (CurrentComPort != null)
-				ret = CurrentComPort.SendData(strMsg, Format);
+				ret = CurrentComPort.SendData(Msg, Format);
 
 			return ret;
 		}

@@ -47,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientGroup.cs" />
+    <Compile Include="CommScheduler.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CommScheduler.Designer.cs">
+      <DependentUpon>CommScheduler.cs</DependentUpon>
+    </Compile>
     <Compile Include="CommSettings.cs" />
     <Compile Include="ConnectForm.cs">
       <SubType>Form</SubType>
@@ -61,6 +67,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="IComm.cs" />
+    <Compile Include="KeyParser.cs" />
     <Compile Include="PortObjects.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -73,6 +80,12 @@
     </Compile>
     <Compile Include="TcpClientCom.cs" />
     <Compile Include="TcpServerCom.cs" />
+    <EmbeddedResource Include="CommScheduler.en.resx">
+      <DependentUpon>CommScheduler.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CommScheduler.resx">
+      <DependentUpon>CommScheduler.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConnectForm.resx">
       <DependentUpon>ConnectForm.cs</DependentUpon>
     </EmbeddedResource>

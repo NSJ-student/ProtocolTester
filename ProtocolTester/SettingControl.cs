@@ -25,8 +25,13 @@ namespace ProtocolTester
 				cbLineFeedOnEnd.Checked = true;
 			if (settings.ShowTxRxSymbol)
 				cbShowTxRxSymbol.Checked = true;
+			if (settings.AutoScroll)
+				cbAutoScroll.Checked = true;
 			txtRxSymbol.Text = settings.RxSymbol;
 			txtTxSymbol.Text = settings.TxSymbol;
+
+			cbShowTime.Items.AddRange(CommSettings.TimeType);
+			cbShowTime.SelectedIndex = settings.ShowTxRxTime;
 		}
 
 		private void cbShowTxRxSymbol_CheckedChanged(object sender, EventArgs e)
@@ -60,6 +65,16 @@ namespace ProtocolTester
 		private void txtTxSymbol_TextChanged(object sender, EventArgs e)
 		{
 			Settings.TxSymbol = txtTxSymbol.Text;
+		}
+
+		private void cbAutoScroll_CheckedChanged(object sender, EventArgs e)
+		{
+			Settings.AutoScroll = cbAutoScroll.Checked;
+		}
+
+		private void cbShowTime_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			Settings.ShowTxRxTime = cbShowTime.SelectedIndex;
 		}
 	}
 }

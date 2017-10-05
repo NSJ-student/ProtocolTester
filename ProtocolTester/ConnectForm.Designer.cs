@@ -44,10 +44,10 @@
 			this.label4 = new System.Windows.Forms.Label();
 			this.cbParity = new System.Windows.Forms.ComboBox();
 			this.tpTcp = new System.Windows.Forms.TabPage();
+			this.txtClientIP = new System.Windows.Forms.MaskedTextBox();
 			this.rbTcpClient = new System.Windows.Forms.RadioButton();
 			this.rbTcpServer = new System.Windows.Forms.RadioButton();
 			this.btnTcpConnect = new System.Windows.Forms.Button();
-			this.txtClientIP = new System.Windows.Forms.TextBox();
 			this.cbServerIP = new System.Windows.Forms.ComboBox();
 			this.lblServerIP = new System.Windows.Forms.Label();
 			this.lblClientIP = new System.Windows.Forms.Label();
@@ -241,10 +241,10 @@
 			// 
 			// tpTcp
 			// 
+			this.tpTcp.Controls.Add(this.txtClientIP);
 			this.tpTcp.Controls.Add(this.rbTcpClient);
 			this.tpTcp.Controls.Add(this.rbTcpServer);
 			this.tpTcp.Controls.Add(this.btnTcpConnect);
-			this.tpTcp.Controls.Add(this.txtClientIP);
 			this.tpTcp.Controls.Add(this.cbServerIP);
 			this.tpTcp.Controls.Add(this.lblServerIP);
 			this.tpTcp.Controls.Add(this.lblClientIP);
@@ -258,11 +258,19 @@
 			this.tpTcp.Text = "TCP";
 			this.tpTcp.UseVisualStyleBackColor = true;
 			// 
+			// txtClientIP
+			// 
+			this.txtClientIP.Location = new System.Drawing.Point(102, 113);
+			this.txtClientIP.Name = "txtClientIP";
+			this.txtClientIP.Size = new System.Drawing.Size(100, 25);
+			this.txtClientIP.TabIndex = 4;
+			this.txtClientIP.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtClientIP_KeyUp);
+			// 
 			// rbTcpClient
 			// 
 			this.rbTcpClient.AutoSize = true;
 			this.rbTcpClient.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
-			this.rbTcpClient.Location = new System.Drawing.Point(229, 104);
+			this.rbTcpClient.Location = new System.Drawing.Point(226, 106);
 			this.rbTcpClient.Name = "rbTcpClient";
 			this.rbTcpClient.Size = new System.Drawing.Size(47, 35);
 			this.rbTcpClient.TabIndex = 2;
@@ -275,7 +283,7 @@
 			this.rbTcpServer.AutoSize = true;
 			this.rbTcpServer.CheckAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.rbTcpServer.Checked = true;
-			this.rbTcpServer.Location = new System.Drawing.Point(226, 52);
+			this.rbTcpServer.Location = new System.Drawing.Point(223, 52);
 			this.rbTcpServer.Name = "rbTcpServer";
 			this.rbTcpServer.Size = new System.Drawing.Size(53, 35);
 			this.rbTcpServer.TabIndex = 1;
@@ -293,13 +301,6 @@
 			this.btnTcpConnect.Text = "Connect";
 			this.btnTcpConnect.UseVisualStyleBackColor = true;
 			this.btnTcpConnect.Click += new System.EventHandler(this.btnTcpConnect_Click);
-			// 
-			// txtClientIP
-			// 
-			this.txtClientIP.Location = new System.Drawing.Point(102, 114);
-			this.txtClientIP.Name = "txtClientIP";
-			this.txtClientIP.Size = new System.Drawing.Size(100, 25);
-			this.txtClientIP.TabIndex = 4;
 			// 
 			// cbServerIP
 			// 
@@ -334,15 +335,16 @@
 			// 
 			// txtPort
 			// 
-			this.txtPort.Location = new System.Drawing.Point(102, 165);
+			this.txtPort.Location = new System.Drawing.Point(102, 164);
 			this.txtPort.Name = "txtPort";
 			this.txtPort.Size = new System.Drawing.Size(100, 25);
 			this.txtPort.TabIndex = 5;
+			this.txtPort.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtPort_KeyUp);
 			// 
 			// lblPort
 			// 
 			this.lblPort.AutoSize = true;
-			this.lblPort.Location = new System.Drawing.Point(19, 168);
+			this.lblPort.Location = new System.Drawing.Point(19, 167);
 			this.lblPort.Name = "lblPort";
 			this.lblPort.Size = new System.Drawing.Size(44, 15);
 			this.lblPort.TabIndex = 0;
@@ -397,7 +399,6 @@
 		private System.Windows.Forms.Button btnSerialConnect;
 		private System.Windows.Forms.TextBox txtPort;
 		private System.Windows.Forms.Label lblPort;
-		private System.Windows.Forms.TextBox txtClientIP;
 		private System.Windows.Forms.ComboBox cbServerIP;
 		private System.Windows.Forms.Label lblServerIP;
 		private System.Windows.Forms.Label lblClientIP;
@@ -405,5 +406,6 @@
 		private System.Windows.Forms.TabPage tpUdp;
 		private System.Windows.Forms.RadioButton rbTcpClient;
 		private System.Windows.Forms.RadioButton rbTcpServer;
+		private System.Windows.Forms.MaskedTextBox txtClientIP;
 	}
 }

@@ -87,11 +87,12 @@ namespace ProtocolTester
 			}
 		}
 
-		public bool SendData(string strMsg, MsgFormat Format)
+		public bool SendData(byte[] Msg, MsgFormat Format)
 		{
 			if(IsOpen)
 			{
-				PortInfo.Write(strMsg);
+				string sendData = Encoding.Default.GetString(Msg);
+				PortInfo.Write(sendData);
 				return true;
 			}
 			else

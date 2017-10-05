@@ -42,127 +42,9 @@ namespace ProtocolTester
 			UpdateControls();
 		}
 
-		private void btnSerialConnect_Click(object sender, EventArgs e)
-		{
-			SerialPort port = portObj.GetPort(CommType.COMM_SERIAL) as SerialPort;
-			if(port == null)
-			{
-				port = new SerialPort();
-			}
-
-			try
-			{
-				port.PortName = cbPort.Text;
-				port.BaudRate = Convert.ToInt32(cbSpeed.Text);
-				port.DataBits = Convert.ToInt32(cbDataBit.Text);
-				port.Parity = (Parity)cbParity.SelectedIndex;
-				switch (cbStopBit.SelectedIndex)
-				{
-					case 0: port.StopBits = StopBits.One; break;
-					case 1: port.StopBits = StopBits.OnePointFive; break;
-					case 2: port.StopBits = StopBits.Two; break;
-					default: port.StopBits = StopBits.One; break;
-				}
-				port.RtsEnable = false;
-
-				portObj.SelectPort(CommType.COMM_SERIAL);
-				if (portObj.OpenPort(port))
-				{
-					DialogResult = DialogResult.OK;
-				}
-				else
-				{
-					DialogResult = DialogResult.Abort;
-					Visible = false;
-					MessageBox.Show("Can't Open [ " + cbPort.Text + " ]");
-				}
-
-				Close();
-			}
-			catch(Exception en)
-			{
-				MessageBox.Show(en.Message);
-				DialogResult = DialogResult.Abort;
-				Close();
-			}
-		}
-
-		private void btnTcpConnect_Click(object sender, EventArgs e)
-		{
-			if(rbTcpServer.Checked)
-			{
-				string[] split = cbServerIP.Text.Split(new char[] { ' ' });
-				try
-				{
-					IPAddress ip = IPAddress.Parse(split[0]);
-					int port = Convert.ToInt32(txtPort.Text);
-
-					portObj.SelectPort(CommType.COMM_TCP_SERVER);
-					IPEndPoint iep = new IPEndPoint(ip, port);
-					if (portObj.OpenPort(iep))
-					{
-						DialogResult = DialogResult.OK;
-					}
-					else
-					{
-						DialogResult = DialogResult.Abort;
-						Visible = false;
-						MessageBox.Show("Can't Open [ Port: " + txtPort.Text + " ]");
-					}
-
-					Close();
-				}
-				catch (Exception en)
-				{
-					MessageBox.Show(en.Message);
-					DialogResult = DialogResult.Abort;
-					Close();
-				}
-			}
-			if(rbTcpClient.Checked)
-			{
-				string[] split = txtClientIP.Text.Split(new char[] { ' ' });
-				try
-				{
-					IPAddress ip = IPAddress.Parse(split[0]);
-					int port = Convert.ToInt32(txtPort.Text);
-
-					portObj.SelectPort(CommType.COMM_TCP_CLIENT);
-					IPEndPoint iep = new IPEndPoint(ip, port);
-					if (portObj.OpenPort(iep))
-					{
-						DialogResult = DialogResult.OK;
-					}
-					else
-					{
-						DialogResult = DialogResult.Abort;
-						Visible = false;
-						MessageBox.Show("Can't Open [ Port: " + txtPort.Text + " ]");
-					}
-
-					Close();
-				}
-				catch (Exception en)
-				{
-					MessageBox.Show(en.Message);
-					DialogResult = DialogResult.Abort;
-					Close();
-				}
-			}
-		}
-
-		private void rbTcpServer_Click(object sender, EventArgs e)
-		{
-			txtClientIP.Enabled = false;
-			cbServerIP.Enabled = true;
-		}
-
-		private void rbTcpClient_Click(object sender, EventArgs e)
-		{
-			txtClientIP.Enabled = true;
-			cbServerIP.Enabled = false;
-		}
-
+		/// <summary>
+		/// 이전 통신 포트 설정에 따라 설정 컨트롤 업데이트
+		/// </summary>
 		private void UpdateControls()
 		{
 			// Update Serial Tab
@@ -212,7 +94,7 @@ namespace ProtocolTester
 			if (serverport != null)
 			{
 				cbServerIP.Text = serverport.Address.ToString();
-				if(rbTcpServer.Checked)
+				if (rbTcpServer.Checked)
 					txtPort.Text = serverport.Port.ToString();
 			}
 			// Update Tcp Tab - Client
@@ -224,7 +106,7 @@ namespace ProtocolTester
 					txtPort.Text = clientport.Port.ToString();
 			}
 
-			if(rbTcpServer.Checked)
+			if (rbTcpServer.Checked)
 			{
 				txtClientIP.Enabled = false;
 				cbServerIP.Enabled = true;
@@ -235,5 +117,154 @@ namespace ProtocolTester
 				cbServerIP.Enabled = false;
 			}
 		}
+
+		/// <summary>
+		/// Serial connect 처리
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnSerialConnect_Click(object sender, EventArgs e)
+		{
+			SerialPort port = portObj.GetPort(CommType.COMM_SERIAL) as SerialPort;
+			if(port == null)
+			{
+				port = new SerialPort();
+			}
+
+			try
+			{
+				port.PortName = cbPort.Text;
+				port.BaudRate = Convert.ToInt32(cbSpeed.Text);
+				port.DataBits = Convert.ToInt32(cbDataBit.Text);
+				port.Parity = (Parity)cbParity.SelectedIndex;
+				switch (cbStopBit.SelectedIndex)
+				{
+					case 0: port.StopBits = StopBits.One; break;
+					case 1: port.StopBits = StopBits.OnePointFive; break;
+					case 2: port.StopBits = StopBits.Two; break;
+					default: port.StopBits = StopBits.One; break;
+				}
+				port.RtsEnable = false;
+
+				portObj.SelectPort(CommType.COMM_SERIAL);
+				if (portObj.OpenPort(port))
+				{
+					DialogResult = DialogResult.OK;
+				}
+				else
+				{
+					DialogResult = DialogResult.Abort;
+					Visible = false;
+					MessageBox.Show("Can't Open [ " + cbPort.Text + " ]");
+				}
+
+				Close();
+			}
+			catch(Exception en)
+			{
+				MessageBox.Show(en.Message);
+				DialogResult = DialogResult.Abort;
+				Close();
+			}
+		}
+
+		/// <summary>
+		/// TCP connect 처리
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void btnTcpConnect_Click(object sender, EventArgs e)
+		{
+			if (rbTcpServer.Checked)
+			{
+				string[] split = cbServerIP.Text.Split(new char[] { ' ' });
+				try
+				{
+					IPAddress ip = IPAddress.Parse(split[0]);
+					int port = Convert.ToInt32(txtPort.Text);
+
+					portObj.SelectPort(CommType.COMM_TCP_SERVER);
+					IPEndPoint iep = new IPEndPoint(ip, port);
+					if (portObj.OpenPort(iep))
+					{
+						DialogResult = DialogResult.OK;
+					}
+					else
+					{
+						DialogResult = DialogResult.Abort;
+						Visible = false;
+						MessageBox.Show("Can't Open [ Port: " + txtPort.Text + " ]");
+					}
+
+					Close();
+				}
+				catch (Exception en)
+				{
+					MessageBox.Show(en.Message);
+					DialogResult = DialogResult.Abort;
+					Close();
+				}
+			}
+			if (rbTcpClient.Checked)
+			{
+				string[] split = txtClientIP.Text.Split(new char[] { ' ' });
+				try
+				{
+					IPAddress ip = IPAddress.Parse(split[0]);
+					int port = Convert.ToInt32(txtPort.Text);
+
+					portObj.SelectPort(CommType.COMM_TCP_CLIENT);
+					IPEndPoint iep = new IPEndPoint(ip, port);
+					if (portObj.OpenPort(iep))
+					{
+						DialogResult = DialogResult.OK;
+					}
+					else
+					{
+						DialogResult = DialogResult.Abort;
+						Visible = false;
+						MessageBox.Show("Can't Open [ Port: " + txtPort.Text + " ]");
+					}
+
+					Close();
+				}
+				catch (Exception en)
+				{
+					MessageBox.Show(en.Message);
+					DialogResult = DialogResult.Abort;
+					Close();
+				}
+			}
+		}
+
+		private void txtPort_KeyUp(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.Enter)
+				btnTcpConnect_Click(null, null);
+		}
+
+		private void txtClientIP_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+				btnTcpConnect_Click(null, null);
+		}
+
+		/// <summary>
+		/// TCP 서버/클라이언트 선택에 따라 활성화되는 컨트롤 변경
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void rbTcpServer_Click(object sender, EventArgs e)
+		{
+			txtClientIP.Enabled = false;
+			cbServerIP.Enabled = true;
+		}
+
+		private void rbTcpClient_Click(object sender, EventArgs e)
+		{
+			txtClientIP.Enabled = true;
+			cbServerIP.Enabled = false;
+		}
+
 	}
 }
