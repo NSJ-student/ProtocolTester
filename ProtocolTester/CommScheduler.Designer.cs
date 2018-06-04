@@ -42,6 +42,8 @@
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnStart = new System.Windows.Forms.Button();
 			this.btnStop = new System.Windows.Forms.Button();
+			this.lblCycle = new System.Windows.Forms.Label();
+			this.label1 = new System.Windows.Forms.Label();
 			this.lblTime = new System.Windows.Forms.Label();
 			this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnNewItem = new System.Windows.Forms.Button();
@@ -49,8 +51,6 @@
 			this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnDown = new System.Windows.Forms.Button();
 			this.btnUp = new System.Windows.Forms.Button();
-			this.lblCycle = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dgvSchedule)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -173,6 +173,16 @@
 			this.btnStop.UseVisualStyleBackColor = true;
 			this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
 			// 
+			// lblCycle
+			// 
+			resources.ApplyResources(this.lblCycle, "lblCycle");
+			this.lblCycle.Name = "lblCycle";
+			// 
+			// label1
+			// 
+			resources.ApplyResources(this.label1, "label1");
+			this.label1.Name = "label1";
+			// 
 			// lblTime
 			// 
 			resources.ApplyResources(this.lblTime, "lblTime");
@@ -219,16 +229,6 @@
 			this.btnUp.Name = "btnUp";
 			this.btnUp.UseVisualStyleBackColor = true;
 			this.btnUp.Click += new System.EventHandler(this.btnUp_Click);
-			// 
-			// lblCycle
-			// 
-			resources.ApplyResources(this.lblCycle, "lblCycle");
-			this.lblCycle.Name = "lblCycle";
-			// 
-			// label1
-			// 
-			resources.ApplyResources(this.label1, "label1");
-			this.label1.Name = "label1";
 			// 
 			// CommScheduler
 			// 

@@ -15,7 +15,7 @@ namespace ProtocolTester
 	public delegate void HandleControl();
 	public partial class CommScheduler : Form
 	{
-		private bool TerminateThread;
+		private bool TerminateScheduleThread;
 		public SendMsg SendstrMsg;
 		Thread ScheduleTask;
 		public enum TypeNum
@@ -36,7 +36,7 @@ namespace ProtocolTester
 		/// <param name="e"></param>
 		private void btnStart_Click(object sender, EventArgs e)
 		{
-			TerminateThread = false;
+			TerminateScheduleThread = false;
 			ScheduleTask = new Thread(new ThreadStart(PlaySchedule));
 			ScheduleTask.Start();
 			btnStart.Enabled = false;
@@ -46,7 +46,7 @@ namespace ProtocolTester
 		{
 			btnStart.Enabled = true;
 			btnStop.Enabled = false;
-			TerminateThread = true;
+			TerminateScheduleThread = true;
 			ScheduleTask.Join(100);
 			if (ScheduleTask.IsAlive)
 			{
@@ -139,7 +139,7 @@ namespace ProtocolTester
 			e.Cancel = true;
 			if(ScheduleTask != null && ScheduleTask.IsAlive)
 			{
-				TerminateThread = true;
+				TerminateScheduleThread = true;
 				ScheduleTask.Join(100);
 				if (ScheduleTask.IsAlive)
 				{
@@ -165,7 +165,7 @@ namespace ProtocolTester
 			{
 				if(e.RowIndex >= 0)
 				{
-					TerminateThread = false;
+					TerminateScheduleThread = false;
 					ThreadStart ts = new ThreadStart(ExecuteSingleRow);
 					ScheduleTask = new Thread(ts);
 					ScheduleTask.Start();
@@ -211,6 +211,7 @@ namespace ProtocolTester
 					dgvSchedule.BackgroundColor = SystemColors.ActiveCaption;
 					btnStart.Enabled = false;
 					btnStop.Enabled = true;
+					Text = "Schedule";
 				}));
 				
 				foreach (DataGridViewRow row in dgvSchedule.Rows)
@@ -221,7 +222,7 @@ namespace ProtocolTester
 					
 					if ((bool)row.Cells["cEnable"].Value)
 					{
-						if(!ExecuteRow(row))
+						if (!ExecuteRow(row))
 						{
 							Invoke(new HandleControl(delegate
 							{
@@ -272,6 +273,7 @@ namespace ProtocolTester
 					dgvSchedule.BackgroundColor = SystemColors.ActiveCaption;
 					btnStart.Enabled = false;
 					btnStop.Enabled = true;
+					Text = "Schedule";
 				}));
 				if (!ExecuteRow(row))
 				{
@@ -306,7 +308,7 @@ namespace ProtocolTester
 					}));
 			}
 		}
-
+		
 		/// <summary>
 		/// 단일 row 처리
 		/// </summary>
@@ -318,26 +320,30 @@ namespace ProtocolTester
 				Invoke(new Action(delegate () {
 					lblCycle.Text = "0";
 				}));
+
 				for (int i = 0; i < cycle; i++)
 				{
+					System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
 					if (!SendstrMsg((string)row.Cells["cValue"].Value, (bool)row.Cells["cFormat"].Value))
 					{
+						watch.Stop();
 						return false;
 					}
 					try
 					{
 						int delay = Convert.ToInt32((string)row.Cells["cDelayMs"].Value);
+						Invoke(new Action(delegate () {
+							lblCycle.Text = (i + 1).ToString();
+						}));
+						watch.Stop();
 						if (delay > 0)
-							Delay(delay);
+							Delay(delay, watch.ElapsedMilliseconds);
 					}
 					catch
 					{
+						watch.Stop();
 						return false;
 					}
-
-					Invoke(new Action(delegate () {
-						lblCycle.Text = (i+1).ToString();
-					}));
 				}
 			}
 			else if (row.Cells["cType"].Value.Equals("DELAY"))
@@ -360,37 +366,74 @@ namespace ProtocolTester
 			return true;
 		}
 
-		private DateTime Delay(int MS)
+		private void Delay(long MS)
 		{
-			DateTime StartMoment = DateTime.Now;
-			DateTime ThisMoment = DateTime.Now;
-			DateTime PrevMoment = DateTime.Now;
-			TimeSpan duration = new TimeSpan(0, 0, 0, 0, MS);
-			TimeSpan period = new TimeSpan(0, 0, 0, 0, 1);
-			DateTime AfterWards = ThisMoment.Add(duration);
+			System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+			long prev = watch.ElapsedMilliseconds;
+			long period = 10;
 
-			while (AfterWards >= ThisMoment)
+			while (MS > watch.ElapsedMilliseconds)
 			{
 				Application.DoEvents();
-				if(TerminateThread)
+				if(TerminateScheduleThread)
 				{
 					throw new Exception("Terminate Thread");
 				}
-				ThisMoment = DateTime.Now;
-				if(ThisMoment.Subtract(PrevMoment) >= period)
+
+				long now = watch.ElapsedMilliseconds;
+				if ((now - prev >= period) &&
+					(now < MS - 30))
 				{
+					prev = now;
 					SendMsg sm = delegate (string state, bool hex)
 					{
 						lblTime.Text = state.Remove(state.Length-4, 4);
-						//Text = "Scheculer - Delay " + state;
 						return hex;
 					};
-					Invoke(sm, new object[] { ThisMoment.Subtract(StartMoment).ToString(), false });
-					PrevMoment = DateTime.Now;
+					Invoke(sm, new object[] { TimeSpan.FromMilliseconds(now).ToString(), false });
 				}
 			}
 
-			return DateTime.Now;
+			watch.Stop();
+			var elapsedMs = watch.ElapsedMilliseconds;
+
+			return;
+		}
+
+		private void Delay(long MS, long ElapsedMs)
+		{
+			System.Diagnostics.Stopwatch watch = System.Diagnostics.Stopwatch.StartNew();
+			long target = MS - ElapsedMs;
+			long prev = watch.ElapsedMilliseconds;
+			long period = 10;
+
+			while (target > watch.ElapsedMilliseconds)
+			{
+				Application.DoEvents();
+				if (TerminateScheduleThread)
+				{
+					throw new Exception("Terminate Thread");
+				}
+
+				long now = watch.ElapsedMilliseconds;
+				if ((now - prev >= period) &&
+					(now < target - 30))
+				{
+					prev = now;
+					SendMsg sm = delegate (string state, bool hex)
+					{
+						lblTime.Text = state.Remove(state.Length - 4, 4);
+						//Text = "Scheculer - Delay " + state;
+						return hex;
+					};
+					Invoke(sm, new object[] { TimeSpan.FromMilliseconds(watch.ElapsedMilliseconds).ToString(), false });
+				}
+			}
+
+			watch.Stop();
+			var elapsedMs = watch.ElapsedMilliseconds;
+
+			return;
 		}
 
 		/// <summary>
