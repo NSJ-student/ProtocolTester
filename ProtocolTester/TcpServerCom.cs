@@ -8,6 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Threading;
+using System.Xml.Linq;
 
 namespace ProtocolTester
 {
@@ -183,27 +184,25 @@ namespace ProtocolTester
 		{
 			try
 			{
-				if (File.Exists(".\\Init.txt"))
+				if (File.Exists(".\\comm_info.xml"))
 				{
-					StreamReader reader = new StreamReader(".\\Init.txt");
+					XElement root = XElement.Load("comm_info.xml");
+					XElement uart = root.Element("tcp_server");
+					XElement element;
 					IPAddress ip = null;
 					int port = 0;
-					string line;
-					while ((line = reader.ReadLine()) != null)
-					{
-						string[] spt = line.Split(new char[] { ' ', '=' }, StringSplitOptions.RemoveEmptyEntries);
-						if (spt.Length == 2)
-						{
-							if (spt[0].Equals("ServerIP")) ip = IPAddress.Parse(spt[1]);
-							if (spt[0].Equals("ServerPort")) port = Convert.ToInt32(spt[1]);
-						}
-					}
+					
+					element = uart.Element("ip");
+					if (element != null) ip = IPAddress.Parse(element.Value);
 
-					if((ip!= null) && (port != 0))
+					element = uart.Element("port");
+					if (element != null) port = Convert.ToInt32(element.Value);
+					
+					if ((ip != null) && (port != 0))
 					{
 						ServerIP = new IPEndPoint(ip, port);
 					}
-					reader.Close();
+
 					return true;
 				}
 				return false;
@@ -216,29 +215,48 @@ namespace ProtocolTester
 
 		public bool SaveInit()
 		{
-			if (File.Exists(".\\Init.txt"))
+			if (ServerIP == null)
+				return false;
+
+			if (File.Exists(".\\comm_info.xml"))
 			{
-				if(ServerIP != null)
+				XElement root = XElement.Load("comm_info.xml");
+				XElement server = root.Element("tcp_server");
+				XElement element;
+
+				if (server == null)
 				{
-					StreamWriter writer = new StreamWriter(".\\Init.txt", true);
-					try
-					{
-						writer.WriteLine();
-						writer.WriteLine("### Server NetInfo");
-						writer.WriteLine();
-						writer.WriteLine("ServerIP=" + ServerIP.Address.ToString());
-						writer.WriteLine("ServerPort=" + ServerIP.Port.ToString());
-						writer.Close();
-					}
-					catch
-					{
-						writer.Close();
-						return false;
-					}
-					return true;
+					server = new XElement("tcp_server");
+					server.Add(new XElement("ip", ServerIP.Address.ToString()));
+					server.Add(new XElement("port", ServerIP.Port.ToString()));
+					root.Add(server);
 				}
+				else
+				{
+					element = server.Element("ip");
+					if (element == null) element.Add(new XElement("ip", ServerIP.Address.ToString()));
+					else if (ServerIP != null) element.ReplaceWith(new XElement("ip", ServerIP.Address.ToString()));
+
+					element = server.Element("port");
+					if (element == null) element.Add(new XElement("port", ServerIP.Port.ToString()));
+					else if (ServerIP != null) element.ReplaceWith(new XElement("port", ServerIP.Port.ToString()));
+				}
+				
+				root.Save("comm_info.xml");
 			}
-			return false;
+			else
+			{
+				XElement root = new XElement("comm_info");
+				XElement server = new XElement("tcp_server");
+
+				server.Add(new XElement("ip", ServerIP.Address.ToString()));
+				server.Add(new XElement("port", ServerIP.Port.ToString()));
+				root.Add(server);
+
+				root.Save("comm_info.xml");
+			}
+
+			return true;
 		}
 	}
 }

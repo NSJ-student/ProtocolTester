@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Xml.Linq;
 
 namespace ProtocolTester
 {
@@ -47,25 +48,32 @@ namespace ProtocolTester
 		{
 			try
 			{
-				if(File.Exists(".\\Init.txt"))
+				if (File.Exists(".\\settings.xml"))
 				{
-					StreamReader reader = new StreamReader(".\\Init.txt");
-					string line;
-					while ((line = reader.ReadLine()) != null)
-					{
-						string[] spt = line.Split(new char[] { ' ', '=' }, StringSplitOptions.RemoveEmptyEntries);
-						if(spt.Length == 2)
-						{
-							if (spt[0].Equals("AutoLineFeed")) AutoLineFeed = Convert.ToBoolean(spt[1]);
-							if (spt[0].Equals("AutoScroll")) AutoScroll = Convert.ToBoolean(spt[1]);
-							if (spt[0].Equals("LineFeedOnEnd")) LineFeedOnEnd = Convert.ToBoolean(spt[1]);
-							if (spt[0].Equals("ShowTxRxSymbol")) ShowTxRxSymbol = Convert.ToBoolean(spt[1]);
-							if (spt[0].Equals("ShowTxRxTime")) ShowTxRxTime = Convert.ToInt32(spt[1]);
-							if (spt[0].Equals("RxSymbol")) RxSymbol = spt[1];
-							if (spt[0].Equals("TxSymbol")) TxSymbol = spt[1];
-						}
-					}
-					reader.Close();
+					var xdoc = XDocument.Load("settings.xml");
+					var xelements = xdoc.Root;
+					XElement element;
+
+					element = xelements.Element("autoLF");
+					if(element != null) AutoLineFeed = Convert.ToBoolean(element.Value);
+
+					element = xelements.Element("autoScroll");
+					if (element != null) AutoScroll = Convert.ToBoolean(xelements.Element("autoScroll").Value);
+
+					element = xelements.Element("endLF");
+					if (element != null) LineFeedOnEnd = Convert.ToBoolean(xelements.Element("endLF").Value);
+
+					element = xelements.Element("showSymbol");
+					if (element != null) ShowTxRxSymbol = Convert.ToBoolean(xelements.Element("showSymbol").Value);
+
+					element = xelements.Element("showTime");
+					if (element != null) ShowTxRxTime = Convert.ToInt32(xelements.Element("showTime").Value);
+
+					element = xelements.Element("rxSymbol");
+					if (element != null) RxSymbol = xelements.Element("rxSymbol").Value;
+
+					element = xelements.Element("txSymbol");
+					if (element != null) TxSymbol = xelements.Element("txSymbol").Value;
 				}
 			}
 			catch
@@ -75,27 +83,55 @@ namespace ProtocolTester
 		}
 		public void SaveInit()
 		{
-			if (File.Exists(".\\Init.txt"))
+			XElement root;
+			if (File.Exists(".\\settings.xml"))
 			{
-				StreamWriter writer = new StreamWriter(".\\Init.txt", true);
-				try
-				{
-					writer.WriteLine();
-					writer.WriteLine("### Setting");
-					writer.WriteLine();
-					writer.WriteLine("AutoLineFeed="+ AutoLineFeed.ToString());
-					writer.WriteLine("AutoScroll=" + AutoScroll.ToString());
-					writer.WriteLine("LineFeedOnEnd=" + LineFeedOnEnd.ToString());
-					writer.WriteLine("ShowTxRxSymbol=" + ShowTxRxSymbol.ToString());
-					writer.WriteLine("ShowTxRxTime=" + ShowTxRxTime.ToString());
-					writer.WriteLine("RxSymbol=" + RxSymbol);
-					writer.WriteLine("TxSymbol=" + TxSymbol);
-					writer.Close();
-				}
-				catch
-				{
-					writer.Close();
-				}
+				root = XElement.Load("settings.xml");
+				XElement element;
+				
+				element = root.Element("autoLF");
+				if (element == null) element.Add(new XElement("autoLF", AutoLineFeed.ToString()));
+				else element.ReplaceWith(new XElement("autoLF", AutoLineFeed.ToString()));
+
+				element = root.Element("autoScroll");
+				if (element == null) element.Add(new XElement("autoScroll", AutoScroll.ToString()));
+				else element.ReplaceWith(new XElement("autoScroll", AutoScroll.ToString()));
+
+				element = root.Element("endLF");
+				if (element == null) element.Add(new XElement("endLF", LineFeedOnEnd.ToString()));
+				else element.ReplaceWith(new XElement("endLF", LineFeedOnEnd.ToString()));
+
+				element = root.Element("showSymbol");
+				if (element == null) element.Add(new XElement("showSymbol", ShowTxRxSymbol.ToString()));
+				else element.ReplaceWith(new XElement("showSymbol", ShowTxRxSymbol.ToString()));
+
+				element = root.Element("showTime");
+				if (element == null) element.Add(new XElement("showTime", ShowTxRxTime.ToString()));
+				else element.ReplaceWith(new XElement("showTime", ShowTxRxTime.ToString()));
+
+				element = root.Element("rxSymbol");
+				if (element == null) element.Add(new XElement("rxSymbol", RxSymbol));
+				else element.ReplaceWith(new XElement("rxSymbol", RxSymbol));
+
+				element = root.Element("txSymbol");
+				if (element == null) element.Add(new XElement("txSymbol", TxSymbol));
+				else element.ReplaceWith(new XElement("txSymbol", TxSymbol));
+
+				root.Save("settings.xml");
+			}
+			else
+			{
+				root = new XElement("settings");
+
+				root.Add(new XElement("autoLF", AutoLineFeed.ToString()));
+				root.Add(new XElement("autoScroll", AutoScroll.ToString()));
+				root.Add(new XElement("endLF", LineFeedOnEnd.ToString()));
+				root.Add(new XElement("showSymbol", ShowTxRxSymbol.ToString()));
+				root.Add(new XElement("showTime", ShowTxRxTime.ToString()));
+				root.Add(new XElement("rxSymbol", RxSymbol));
+				root.Add(new XElement("txSymbol", TxSymbol));
+
+				root.Save("settings.xml");
 			}
 		}
 	}

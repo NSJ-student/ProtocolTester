@@ -7,6 +7,7 @@ using System.IO.Ports;
 using System.Windows.Forms;
 using System.Threading;
 using System.IO;
+using System.Xml.Linq;
 
 namespace ProtocolTester
 {
@@ -121,26 +122,30 @@ namespace ProtocolTester
 		{
 			try
 			{
-				if (File.Exists(".\\Init.txt"))
+				if (File.Exists(".\\comm_info.xml"))
 				{
-					StreamReader reader = new StreamReader(".\\Init.txt");
-					string line;
-					while ((line = reader.ReadLine()) != null)
-					{
-						string[] spt = line.Split(new char[] { ' ', '=' }, StringSplitOptions.RemoveEmptyEntries);
-						if (spt.Length == 2)
-						{
-							if (PortInfo == null)
-								PortInfo = new SerialPort();
+					XElement root = XElement.Load("comm_info.xml");
+					XElement uart = root.Element("uart");
+					XElement element;
 
-							if (spt[0].Equals("PortName"))	PortInfo.PortName = spt[1];
-							if (spt[0].Equals("BaudRate"))	PortInfo.BaudRate = Convert.ToInt32(spt[1]);
-							if (spt[0].Equals("Parity"))	PortInfo.Parity = (Parity)Convert.ToInt32(spt[1]);
-							if (spt[0].Equals("StopBits"))	PortInfo.StopBits = (StopBits)Convert.ToInt32(spt[1]);
-							if (spt[0].Equals("DataBits"))	PortInfo.DataBits = Convert.ToInt32(spt[1]);
-						}
-					}
-					reader.Close();
+					if (PortInfo == null)
+						PortInfo = new SerialPort();
+
+					element = uart.Element("port");
+					if(element != null) PortInfo.PortName = element.Value;
+
+					element = uart.Element("baudrate");
+					if (element != null) PortInfo.BaudRate = Convert.ToInt32(element.Value);
+
+					element = uart.Element("parity");
+					if (element != null) PortInfo.Parity = (Parity)Convert.ToInt32(element.Value);
+
+					element = uart.Element("stopbits");
+					if (element != null) PortInfo.StopBits = (StopBits)Convert.ToInt32(element.Value);
+
+					element = uart.Element("databits");
+					if (element != null) PortInfo.DataBits = Convert.ToInt32(element.Value);
+
 					return true;
 				}
 				return false;
@@ -153,32 +158,67 @@ namespace ProtocolTester
 
 		public bool SaveInit()
 		{
-			if (File.Exists(".\\Init.txt"))
+			if (PortInfo == null)
+				return false;
+
+			if (File.Exists(".\\comm_info.xml"))
 			{
-				if (PortInfo != null)
+				XElement root = XElement.Load("comm_info.xml");
+				XElement uart = root.Element("uart");
+				XElement element;
+
+				if (uart == null)
 				{
-					StreamWriter writer = new StreamWriter(".\\Init.txt", true);
-					try
-					{
-						writer.WriteLine();
-						writer.WriteLine("### Serial PortInfo");
-						writer.WriteLine();
-						writer.WriteLine("PortName=" + PortInfo.PortName);
-						writer.WriteLine("BaudRate=" + PortInfo.BaudRate.ToString());
-						writer.WriteLine("Parity=" + PortInfo.Parity.ToString());
-						writer.WriteLine("StopBits=" + PortInfo.StopBits.ToString());
-						writer.WriteLine("DataBits=" + PortInfo.DataBits.ToString());
-						writer.Close();
-					}
-					catch
-					{
-						writer.Close();
-						return false;
-					}
-					return true;
+					uart = new XElement("uart");
+					uart.Add(new XElement("port", PortInfo.PortName.ToString()));
+					uart.Add(new XElement("baudrate", PortInfo.BaudRate.ToString()));
+					uart.Add(new XElement("parity", PortInfo.Parity.ToString()));
+					uart.Add(new XElement("stopbits", PortInfo.StopBits.ToString()));
+					uart.Add(new XElement("databits", PortInfo.DataBits.ToString()));
+					root.Add(uart);
 				}
+				else
+				{
+					element = uart.Element("port");
+					if (element == null) element.Add(new XElement("port", PortInfo.PortName));
+					else if (PortInfo.PortName != null) element.ReplaceWith(new XElement("port", PortInfo.PortName));
+
+					element = uart.Element("baudrate");
+					if (element == null) element.Add(new XElement("baudrate", PortInfo.BaudRate.ToString()));
+					else element.ReplaceWith(new XElement("baudrate", PortInfo.BaudRate.ToString()));
+
+					element = uart.Element("parity");
+					if (element == null) element.Add(new XElement("parity", PortInfo.Parity.ToString()));
+					else element.ReplaceWith(new XElement("parity", PortInfo.Parity.ToString()));
+
+					element = uart.Element("stopbits");
+					if (element == null) element.Add(new XElement("stopbits", PortInfo.StopBits.ToString()));
+					else element.ReplaceWith(new XElement("stopbits", PortInfo.StopBits.ToString()));
+
+					element = uart.Element("databits");
+					if (element == null) element.Add(new XElement("databits", PortInfo.DataBits.ToString()));
+					else element.ReplaceWith(new XElement("databits", PortInfo.DataBits.ToString()));
+				}
+
+				root.Save("comm_info.xml");
 			}
-			return false;
+			else
+			{
+				XElement root = new XElement("comm_info");
+				XElement uart = new XElement("uart");
+				
+				uart.Add(new XElement("port", PortInfo.PortName.ToString()));
+				uart.Add(new XElement("baudrate", PortInfo.BaudRate.ToString()));
+				uart.Add(new XElement("parity", PortInfo.Parity.ToString()));
+				uart.Add(new XElement("stopbits", PortInfo.StopBits.ToString()));
+				uart.Add(new XElement("databits", PortInfo.DataBits.ToString()));
+				root.Add(uart);
+
+				root.Save("comm_info.xml");
+			}
+
+
+			return true;
 		}
 	}
 }
