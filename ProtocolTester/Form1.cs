@@ -22,6 +22,7 @@ namespace ProtocolTester
 		PortObjects commObj;
 		CommSettings commSettings;
 		CommScheduler commSchedule;
+		int orgDist;
 		public Form1()
 		{
 			InitializeComponent();
@@ -416,7 +417,34 @@ namespace ProtocolTester
 		/// <param name="e"></param>
 		private void btnShortKey_Click(object sender, EventArgs e)
 		{
-			commSchedule.Show();
+			if(commSchedule.Visible)
+			{
+				this.MinimumSize = new Size(this.MinimumSize.Width - commSchedule.ClientSize.Width,
+											this.MinimumSize.Height);
+				this.Width = this.Width - commSchedule.Width;
+				tableLayoutForm.Controls.Remove(tableLayoutForm.GetControlFromPosition(1, 0));
+				tableLayoutForm.ColumnCount = 1;
+
+				commSchedule.Hide();
+				commSchedule.TopLevel = true;
+				commSchedule.FormBorderStyle = FormBorderStyle.FixedDialog;
+			}
+			else
+			{
+				commSchedule.TopLevel = false;
+				commSchedule.FormBorderStyle = FormBorderStyle.None;
+				commSchedule.Dock = DockStyle.Fill;
+				commSchedule.Show();
+
+				tableLayoutForm.ColumnCount = 2;
+				tableLayoutForm.Controls.Add(commSchedule, 1, 0);
+				tableLayoutForm.ColumnStyles.Clear();
+				tableLayoutForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+				tableLayoutForm.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, commSchedule.ClientSize.Width));
+				this.Width = this.Width + commSchedule.ClientSize.Width;
+				this.MinimumSize = new Size(this.MinimumSize.Width + commSchedule.ClientSize.Width,
+											this.MinimumSize.Height);
+			}
 		}
 
 		/// <summary>

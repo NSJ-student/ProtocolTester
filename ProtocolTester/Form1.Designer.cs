@@ -49,9 +49,11 @@
 			this.txtSendMsg = new System.Windows.Forms.MaskedTextBox();
 			this.btnShortKey = new System.Windows.Forms.Button();
 			this.btnSettings = new System.Windows.Forms.Button();
+			this.tableLayoutForm = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
+			this.tableLayoutForm.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -80,7 +82,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.btnShortKey, 3, 1);
 			this.tableLayoutPanel1.Controls.Add(this.btnSettings, 5, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 1);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 9;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
@@ -92,7 +94,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(582, 553);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(588, 553);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// rtbLog
@@ -104,7 +106,7 @@
 			this.rtbLog.Location = new System.Drawing.Point(13, 63);
 			this.rtbLog.Name = "rtbLog";
 			this.rtbLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-			this.rtbLog.Size = new System.Drawing.Size(556, 317);
+			this.rtbLog.Size = new System.Drawing.Size(562, 311);
 			this.rtbLog.TabIndex = 1;
 			this.rtbLog.Text = "";
 			// 
@@ -113,7 +115,7 @@
 			this.lblSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblSend.AutoSize = true;
 			this.lblSend.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.lblSend.Location = new System.Drawing.Point(13, 435);
+			this.lblSend.Location = new System.Drawing.Point(13, 429);
 			this.lblSend.Name = "lblSend";
 			this.lblSend.Size = new System.Drawing.Size(208, 15);
 			this.lblSend.TabIndex = 4;
@@ -122,7 +124,7 @@
 			// btnLogClear
 			// 
 			this.btnLogClear.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.btnLogClear.Location = new System.Drawing.Point(495, 386);
+			this.btnLogClear.Location = new System.Drawing.Point(501, 380);
 			this.btnLogClear.Name = "btnLogClear";
 			this.btnLogClear.Size = new System.Drawing.Size(74, 34);
 			this.btnLogClear.TabIndex = 6;
@@ -135,7 +137,7 @@
 			this.lblStartMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblStartMsg.AutoSize = true;
 			this.lblStartMsg.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.lblStartMsg.Location = new System.Drawing.Point(315, 515);
+			this.lblStartMsg.Location = new System.Drawing.Point(321, 509);
 			this.lblStartMsg.Name = "lblStartMsg";
 			this.lblStartMsg.Size = new System.Drawing.Size(44, 15);
 			this.lblStartMsg.TabIndex = 7;
@@ -144,7 +146,7 @@
 			// txtStartMsg
 			// 
 			this.txtStartMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtStartMsg.Location = new System.Drawing.Point(365, 510);
+			this.txtStartMsg.Location = new System.Drawing.Point(371, 504);
 			this.txtStartMsg.Name = "txtStartMsg";
 			this.txtStartMsg.Size = new System.Drawing.Size(74, 25);
 			this.txtStartMsg.TabIndex = 9;
@@ -155,7 +157,7 @@
 			this.lblEndMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.lblEndMsg.AutoSize = true;
 			this.lblEndMsg.Font = new System.Drawing.Font("굴림", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.lblEndMsg.Location = new System.Drawing.Point(445, 515);
+			this.lblEndMsg.Location = new System.Drawing.Point(451, 509);
 			this.lblEndMsg.Name = "lblEndMsg";
 			this.lblEndMsg.Size = new System.Drawing.Size(44, 15);
 			this.lblEndMsg.TabIndex = 8;
@@ -164,7 +166,7 @@
 			// txtEndMsg
 			// 
 			this.txtEndMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-			this.txtEndMsg.Location = new System.Drawing.Point(495, 510);
+			this.txtEndMsg.Location = new System.Drawing.Point(501, 504);
 			this.txtEndMsg.Name = "txtEndMsg";
 			this.txtEndMsg.Size = new System.Drawing.Size(74, 25);
 			this.txtEndMsg.TabIndex = 10;
@@ -173,7 +175,7 @@
 			// btnSend
 			// 
 			this.btnSend.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.btnSend.Location = new System.Drawing.Point(495, 466);
+			this.btnSend.Location = new System.Drawing.Point(501, 460);
 			this.btnSend.Name = "btnSend";
 			this.btnSend.Size = new System.Drawing.Size(74, 34);
 			this.btnSend.TabIndex = 3;
@@ -189,7 +191,7 @@
 			this.flowLayoutPanel1.Controls.Add(this.lblRxFormat);
 			this.flowLayoutPanel1.Controls.Add(this.rbRxMsgHex);
 			this.flowLayoutPanel1.Controls.Add(this.rbRxMsgASCII);
-			this.flowLayoutPanel1.Location = new System.Drawing.Point(13, 386);
+			this.flowLayoutPanel1.Location = new System.Drawing.Point(13, 380);
 			this.flowLayoutPanel1.Name = "flowLayoutPanel1";
 			this.flowLayoutPanel1.Size = new System.Drawing.Size(208, 34);
 			this.flowLayoutPanel1.TabIndex = 19;
@@ -236,7 +238,7 @@
 			this.flowLayoutPanel2.Controls.Add(this.rbSendHex);
 			this.flowLayoutPanel2.Controls.Add(this.rbSendASCII);
 			this.flowLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.flowLayoutPanel2.Location = new System.Drawing.Point(13, 506);
+			this.flowLayoutPanel2.Location = new System.Drawing.Point(13, 500);
 			this.flowLayoutPanel2.Name = "flowLayoutPanel2";
 			this.flowLayoutPanel2.Size = new System.Drawing.Size(208, 34);
 			this.flowLayoutPanel2.TabIndex = 20;
@@ -293,9 +295,9 @@
 			// 
 			this.txtSendMsg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel1.SetColumnSpan(this.txtSendMsg, 5);
-			this.txtSendMsg.Location = new System.Drawing.Point(13, 470);
+			this.txtSendMsg.Location = new System.Drawing.Point(13, 464);
 			this.txtSendMsg.Name = "txtSendMsg";
-			this.txtSendMsg.Size = new System.Drawing.Size(476, 25);
+			this.txtSendMsg.Size = new System.Drawing.Size(482, 25);
 			this.txtSendMsg.TabIndex = 21;
 			this.txtSendMsg.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSendMsg_KeyPress);
 			this.txtSendMsg.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSendMsg_KeyUp);
@@ -304,7 +306,7 @@
 			// 
 			this.tableLayoutPanel1.SetColumnSpan(this.btnShortKey, 2);
 			this.btnShortKey.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.btnShortKey.Location = new System.Drawing.Point(315, 13);
+			this.btnShortKey.Location = new System.Drawing.Point(321, 13);
 			this.btnShortKey.Name = "btnShortKey";
 			this.btnShortKey.Size = new System.Drawing.Size(124, 34);
 			this.btnShortKey.TabIndex = 12;
@@ -316,7 +318,7 @@
 			// 
 			this.tableLayoutPanel1.SetColumnSpan(this.btnSettings, 2);
 			this.btnSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.btnSettings.Location = new System.Drawing.Point(445, 13);
+			this.btnSettings.Location = new System.Drawing.Point(451, 13);
 			this.btnSettings.Name = "btnSettings";
 			this.btnSettings.Size = new System.Drawing.Size(124, 34);
 			this.btnSettings.TabIndex = 11;
@@ -324,12 +326,26 @@
 			this.btnSettings.UseVisualStyleBackColor = true;
 			this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
 			// 
+			// tableLayoutForm
+			// 
+			this.tableLayoutForm.ColumnCount = 1;
+			this.tableLayoutForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutForm.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutForm.Controls.Add(this.tableLayoutPanel1, 0, 0);
+			this.tableLayoutForm.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutForm.Location = new System.Drawing.Point(0, 0);
+			this.tableLayoutForm.Name = "tableLayoutForm";
+			this.tableLayoutForm.RowCount = 1;
+			this.tableLayoutForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutForm.Size = new System.Drawing.Size(594, 553);
+			this.tableLayoutForm.TabIndex = 1;
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(582, 553);
-			this.Controls.Add(this.tableLayoutPanel1);
+			this.ClientSize = new System.Drawing.Size(594, 553);
+			this.Controls.Add(this.tableLayoutForm);
 			this.MinimumSize = new System.Drawing.Size(600, 400);
 			this.Name = "Form1";
 			this.Text = "Tester";
@@ -340,6 +356,7 @@
 			this.flowLayoutPanel1.PerformLayout();
 			this.flowLayoutPanel2.ResumeLayout(false);
 			this.flowLayoutPanel2.PerformLayout();
+			this.tableLayoutForm.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -367,6 +384,7 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.MaskedTextBox txtSendMsg;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutForm;
 	}
 }
 

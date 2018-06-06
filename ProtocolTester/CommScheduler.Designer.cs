@@ -204,6 +204,7 @@
 			// 
 			// btnDelete
 			// 
+			this.btnDelete.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			resources.ApplyResources(this.btnDelete, "btnDelete");
 			this.btnDelete.Name = "btnDelete";
 			this.btnDelete.UseVisualStyleBackColor = true;
@@ -218,6 +219,7 @@
 			// 
 			// btnDown
 			// 
+			this.btnDown.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			resources.ApplyResources(this.btnDown, "btnDown");
 			this.btnDown.Name = "btnDown";
 			this.btnDown.UseVisualStyleBackColor = true;
@@ -235,7 +237,8 @@
 			resources.ApplyResources(this, "$this");
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.DoubleBuffered = true;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "CommScheduler";

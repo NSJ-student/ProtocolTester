@@ -15,9 +15,11 @@ namespace ProtocolTester
 	public delegate void HandleControl();
 	public partial class CommScheduler : Form
 	{
+		private BackgroundWorker ScheduleWork;
 		private bool TerminateScheduleThread;
+		private Thread ScheduleTask;
+
 		public SendMsg SendstrMsg;
-		Thread ScheduleTask;
 		public enum TypeNum
 		{
 			TYPE_SEND,
@@ -27,6 +29,11 @@ namespace ProtocolTester
 		{
 			InitializeComponent();
 			SendstrMsg = SendEvent;
+			ScheduleWork = new BackgroundWorker();
+			ScheduleWork.WorkerReportsProgress = true;
+//			ScheduleWork.RunWorkerCompleted += new RunWorkerCompletedEventHandler(MakeComponentsComplete);
+//			ScheduleWork.DoWork += new DoWorkEventHandler();
+//			ScheduleWork.ProgressChanged += new ProgressChangedEventHandler();
 		}
 
 		/// <summary>
