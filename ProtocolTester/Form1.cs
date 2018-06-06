@@ -22,14 +22,13 @@ namespace ProtocolTester
 		PortObjects commObj;
 		CommSettings commSettings;
 		CommScheduler commSchedule;
-		int orgDist;
 		public Form1()
 		{
 			InitializeComponent();
 
 			AppStartTime = DateTime.Now;
 
-			commSchedule = new CommScheduler(Port_Send);
+			commSchedule = new CommScheduler(Port_Send, false, ShowSchduler);
 			commSchedule.LoadInit();
 
 			commSettings = new CommSettings();
@@ -415,35 +414,64 @@ namespace ProtocolTester
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void btnShortKey_Click(object sender, EventArgs e)
+		private void cbSchedule_CheckedChanged(object sender, EventArgs e)
 		{
-			if(commSchedule.Visible)
+			ShowSchduler(false);
+		}
+
+		public void ShowSchduler(bool on_show)
+		{
+			if (!on_show && commSchedule.Visible)
 			{
-				this.MinimumSize = new Size(this.MinimumSize.Width - commSchedule.ClientSize.Width,
-											this.MinimumSize.Height);
-				this.Width = this.Width - commSchedule.Width;
-				tableLayoutForm.Controls.Remove(tableLayoutForm.GetControlFromPosition(1, 0));
-				tableLayoutForm.ColumnCount = 1;
+				if (tableLayoutForm.ColumnCount != 1)
+				{
+					this.MinimumSize = new Size(this.MinimumSize.Width - commSchedule.ClientSize.Width,
+												this.MinimumSize.Height);
+					this.Width = this.Width - commSchedule.Width;
+					tableLayoutForm.Controls.Remove(tableLayoutForm.GetControlFromPosition(1, 0));
+					tableLayoutForm.ColumnCount = 1;
+				}
 
 				commSchedule.Hide();
-				commSchedule.TopLevel = true;
-				commSchedule.FormBorderStyle = FormBorderStyle.FixedDialog;
 			}
 			else
 			{
-				commSchedule.TopLevel = false;
-				commSchedule.FormBorderStyle = FormBorderStyle.None;
-				commSchedule.Dock = DockStyle.Fill;
+				if (commSchedule.Docking)
+				{
+					commSchedule.TopLevel = false;
+					commSchedule.FormBorderStyle = FormBorderStyle.None;
+					commSchedule.Dock = DockStyle.Fill;
+				}
+				else
+				{
+					if (tableLayoutForm.ColumnCount != 1)
+					{
+						this.MinimumSize = new Size(this.MinimumSize.Width - commSchedule.ClientSize.Width,
+													this.MinimumSize.Height);
+						this.Width = this.Width - commSchedule.Width;
+						tableLayoutForm.Controls.Remove(tableLayoutForm.GetControlFromPosition(1, 0));
+						tableLayoutForm.ColumnCount = 1;
+						commSchedule.Hide();
+					}
+
+					commSchedule.TopLevel = true;
+					commSchedule.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+					commSchedule.Size = new Size(600, 400);
+					commSchedule.Location = new Point(Location.X + Width, Location.Y);
+				}
 				commSchedule.Show();
 
-				tableLayoutForm.ColumnCount = 2;
-				tableLayoutForm.Controls.Add(commSchedule, 1, 0);
-				tableLayoutForm.ColumnStyles.Clear();
-				tableLayoutForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-				tableLayoutForm.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, commSchedule.ClientSize.Width));
-				this.Width = this.Width + commSchedule.ClientSize.Width;
-				this.MinimumSize = new Size(this.MinimumSize.Width + commSchedule.ClientSize.Width,
-											this.MinimumSize.Height);
+				if (commSchedule.Docking)
+				{
+					tableLayoutForm.ColumnCount = 2;
+					tableLayoutForm.Controls.Add(commSchedule, 1, 0);
+					tableLayoutForm.ColumnStyles.Clear();
+					tableLayoutForm.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+					tableLayoutForm.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, commSchedule.ClientSize.Width));
+					this.Width = this.Width + commSchedule.ClientSize.Width;
+					this.MinimumSize = new Size(this.MinimumSize.Width + commSchedule.ClientSize.Width,
+												this.MinimumSize.Height);
+				}
 			}
 		}
 

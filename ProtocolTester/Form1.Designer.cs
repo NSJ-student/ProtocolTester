@@ -47,9 +47,9 @@
 			this.rbSendASCII = new System.Windows.Forms.RadioButton();
 			this.btnConnect = new System.Windows.Forms.Button();
 			this.txtSendMsg = new System.Windows.Forms.MaskedTextBox();
-			this.btnShortKey = new System.Windows.Forms.Button();
 			this.btnSettings = new System.Windows.Forms.Button();
 			this.tableLayoutForm = new System.Windows.Forms.TableLayoutPanel();
+			this.cbSchedule = new System.Windows.Forms.CheckBox();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel1.SuspendLayout();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -79,10 +79,10 @@
 			this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel2, 1, 7);
 			this.tableLayoutPanel1.Controls.Add(this.btnConnect, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.txtSendMsg, 1, 6);
-			this.tableLayoutPanel1.Controls.Add(this.btnShortKey, 3, 1);
 			this.tableLayoutPanel1.Controls.Add(this.btnSettings, 5, 1);
+			this.tableLayoutPanel1.Controls.Add(this.cbSchedule, 3, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(5, 1);
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 9;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
@@ -94,7 +94,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(588, 553);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(588, 547);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// rtbLog
@@ -302,18 +302,6 @@
 			this.txtSendMsg.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtSendMsg_KeyPress);
 			this.txtSendMsg.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSendMsg_KeyUp);
 			// 
-			// btnShortKey
-			// 
-			this.tableLayoutPanel1.SetColumnSpan(this.btnShortKey, 2);
-			this.btnShortKey.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.btnShortKey.Location = new System.Drawing.Point(321, 13);
-			this.btnShortKey.Name = "btnShortKey";
-			this.btnShortKey.Size = new System.Drawing.Size(124, 34);
-			this.btnShortKey.TabIndex = 12;
-			this.btnShortKey.Text = "Schedule";
-			this.btnShortKey.UseVisualStyleBackColor = true;
-			this.btnShortKey.Click += new System.EventHandler(this.btnShortKey_Click);
-			// 
 			// btnSettings
 			// 
 			this.tableLayoutPanel1.SetColumnSpan(this.btnSettings, 2);
@@ -339,6 +327,21 @@
 			this.tableLayoutForm.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutForm.Size = new System.Drawing.Size(594, 553);
 			this.tableLayoutForm.TabIndex = 1;
+			// 
+			// cbSchedule
+			// 
+			this.cbSchedule.Appearance = System.Windows.Forms.Appearance.Button;
+			this.cbSchedule.AutoSize = true;
+			this.tableLayoutPanel1.SetColumnSpan(this.cbSchedule, 2);
+			this.cbSchedule.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.cbSchedule.Location = new System.Drawing.Point(321, 13);
+			this.cbSchedule.Name = "cbSchedule";
+			this.cbSchedule.Size = new System.Drawing.Size(124, 34);
+			this.cbSchedule.TabIndex = 22;
+			this.cbSchedule.Text = "Schedule";
+			this.cbSchedule.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.cbSchedule.UseVisualStyleBackColor = true;
+			this.cbSchedule.CheckedChanged += new System.EventHandler(this.cbSchedule_CheckedChanged);
 			// 
 			// Form1
 			// 
@@ -374,7 +377,6 @@
 		private System.Windows.Forms.Label lblEndMsg;
 		private System.Windows.Forms.TextBox txtEndMsg;
 		private System.Windows.Forms.Button btnSettings;
-		private System.Windows.Forms.Button btnShortKey;
 		private System.Windows.Forms.RadioButton rbSendASCII;
 		private System.Windows.Forms.RadioButton rbRxMsgASCII;
 		private System.Windows.Forms.RadioButton rbRxMsgHex;
@@ -385,6 +387,7 @@
 		private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
 		private System.Windows.Forms.MaskedTextBox txtSendMsg;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutForm;
+		private System.Windows.Forms.CheckBox cbSchedule;
 	}
 }
 

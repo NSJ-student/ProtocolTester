@@ -14,27 +14,32 @@ using System.Xml.Linq;
 namespace ProtocolTester
 {
 	public delegate void HandleControl();
+	public delegate void DoDock(bool on_show);
 	public partial class CommScheduler : Form
 	{
-		private BackgroundWorker ScheduleWork;
 		private bool TerminateScheduleThread;
 		private Thread ScheduleTask;
+		private DoDock WindowDock;
+		private SendMsg SendstrMsg;
 
-		public SendMsg SendstrMsg;
 		public enum TypeNum
 		{
 			TYPE_SEND,
 			TYPE_DELAY
 		}
-		public CommScheduler(SendMsg SendEvent)
+		public bool Docking
+		{
+			get
+			{
+				return dockingToolStripMenuItem.Checked;
+			}
+		}
+		public CommScheduler(SendMsg SendEvent, bool dock, DoDock DoDock)
 		{
 			InitializeComponent();
 			SendstrMsg = SendEvent;
-			ScheduleWork = new BackgroundWorker();
-			ScheduleWork.WorkerReportsProgress = true;
-			//			ScheduleWork.RunWorkerCompleted += new RunWorkerCompletedEventHandler(MakeComponentsComplete);
-			//			ScheduleWork.DoWork += new DoWorkEventHandler();
-			//			ScheduleWork.ProgressChanged += new ProgressChangedEventHandler();
+			dockingToolStripMenuItem.Checked = dock;
+			WindowDock = DoDock;
 		}
 
 		/// <summary>
@@ -96,9 +101,10 @@ namespace ProtocolTester
 		{
 			if (dgvSchedule.SelectedRows.Count > 0)
 			{
-				DataGridViewRow row = dgvSchedule.SelectedRows[0];
-
-				dgvSchedule.Rows.Remove(row);
+				foreach(DataGridViewRow row in dgvSchedule.SelectedRows)
+				{
+					dgvSchedule.Rows.Remove(row);
+				}
 			}
 		}
 
@@ -111,14 +117,40 @@ namespace ProtocolTester
 		{
 			if (dgvSchedule.SelectedRows.Count > 0)
 			{
-				int prevIndex = dgvSchedule.SelectedRows[0].Index;
-				if (prevIndex == 0)
-					return;
-				DataGridViewRow row = dgvSchedule.SelectedRows[0];
+				DataGridViewRow[] rows = new DataGridViewRow[dgvSchedule.Rows.Count];
+				
+				int minIdx = dgvSchedule.SelectedRows[0].Index;
+				foreach (DataGridViewRow row in dgvSchedule.SelectedRows)
+				{
+					if(minIdx > row.Index) minIdx = row.Index;
+					rows[row.Index] = row;
+				}
+				foreach (DataGridViewRow row in dgvSchedule.SelectedRows)
+				{
+					dgvSchedule.Rows.Remove(row);
+				}
 
-				dgvSchedule.Rows.Remove(row);
-				dgvSchedule.Rows.Insert(prevIndex - 1, row);
-				dgvSchedule.CurrentCell = row.Cells[0];
+				var selected = from n in rows
+							   where n != null
+							   select n;
+				dgvSchedule.ClearSelection();
+				if (minIdx > 0)
+				{
+					dgvSchedule.Rows.InsertRange(minIdx - 1, selected.ToArray<DataGridViewRow>());
+				}
+				else
+				{
+					dgvSchedule.Rows.InsertRange(0, selected.ToArray<DataGridViewRow>());
+				}
+				DataGridViewRow temp = null;
+				if (dgvSchedule.SelectedRows.Count > 0)
+					temp = dgvSchedule.SelectedRows[0];
+				foreach (DataGridViewRow row in selected)
+				{
+					row.Selected = true;
+				}
+				if (temp != null)
+					temp.Selected = false;
 			}
 		}
 
@@ -126,14 +158,44 @@ namespace ProtocolTester
 		{
 			if (dgvSchedule.SelectedRows.Count > 0)
 			{
-				int prevIndex = dgvSchedule.SelectedRows[0].Index;
-				if (prevIndex == dgvSchedule.Rows.Count - 1)
-					return;
-				DataGridViewRow row = dgvSchedule.SelectedRows[0];
+				DataGridViewRow[] rows = new DataGridViewRow[dgvSchedule.Rows.Count];
 
-				dgvSchedule.Rows.Remove(row);
-				dgvSchedule.Rows.Insert(prevIndex + 1, row);
-				dgvSchedule.CurrentCell = row.Cells[0];
+				int maxIdx = dgvSchedule.SelectedRows[0].Index;
+				int total = dgvSchedule.Rows.Count;
+				foreach (DataGridViewRow row in dgvSchedule.SelectedRows)
+				{
+					if (maxIdx < row.Index) maxIdx = row.Index;
+					rows[row.Index] = row;
+				}
+				DataGridViewRow last = null;
+				if (maxIdx < total - 1)
+					last = dgvSchedule.Rows[maxIdx + 1];
+				foreach (DataGridViewRow row in dgvSchedule.SelectedRows)
+				{
+					dgvSchedule.Rows.Remove(row);
+				}
+
+				var selected = from n in rows
+							   where n != null
+							   select n;
+				dgvSchedule.ClearSelection();
+				if (last == null)
+				{
+					dgvSchedule.Rows.AddRange(selected.ToArray<DataGridViewRow>());
+				}
+				else
+				{
+					dgvSchedule.Rows.InsertRange(last.Index + 1, selected.ToArray<DataGridViewRow>());
+				}
+				DataGridViewRow temp = null;
+				if (dgvSchedule.SelectedRows.Count > 0)
+					temp = dgvSchedule.SelectedRows[0];
+				foreach (DataGridViewRow row in selected)
+				{
+					row.Selected = true;
+				}
+				if(temp != null)
+					temp.Selected = false;
 			}
 		}
 
@@ -179,17 +241,27 @@ namespace ProtocolTester
 					ScheduleTask.Start();
 				}
 			}
+			else if((dgvSchedule.Columns["cName"].Index <= e.ColumnIndex) &&
+					(e.ColumnIndex <= dgvSchedule.Columns["cDelayMs"].Index))
+			{
+				if(dgvSchedule.CurrentCell.RowIndex == e.RowIndex)
+				{
+					dgvSchedule.BeginEdit(true);
+				}
+//				dgvSchedule.CurrentCell = dgvSchedule[e.ColumnIndex, e.RowIndex];
+
+			}
 		}
 
 		/// <summary>
-		/// Type 값 선택 루틴
+		/// Type 값 선택, 문자열 format 변경
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void dgvSchedule_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
 			// Type값이 선택됨
-			if (e.ColumnIndex == 0)
+			if (e.ColumnIndex == 1)
 			{
 				if (e.RowIndex >= 0)
 				{
@@ -204,6 +276,40 @@ namespace ProtocolTester
 						row.Cells["cFormat"].ReadOnly = true;
 					}
 				}
+			}
+			if (e.ColumnIndex == 2)
+			{
+				if (e.RowIndex >= 0)
+				{
+					DataGridViewRow row = dgvSchedule.Rows[e.RowIndex];
+					bool check = (bool)row.Cells["cFormat"].Value;
+					string str = (string)row.Cells["cValue"].Value;
+					if (str == null) return;
+
+					if (check)
+					{
+						row.Cells["cValue"].Value =
+							KeyParser.AsciiStringToHexString(str);
+					}
+					else
+					{
+						row.Cells["cValue"].Value =
+							KeyParser.HexStringToAsciiString(str);
+					}
+				}
+			}
+		}
+		
+		private void dgvSchedule_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+		{
+			dgvSchedule.CommitEdit(DataGridViewDataErrorContexts.Commit);
+		}
+
+		private void dgvSchedule_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+		{
+			if (dgvSchedule.CurrentCell is DataGridViewCheckBoxCell)
+			{
+				dgvSchedule.CommitEdit(DataGridViewDataErrorContexts.Commit);
 			}
 		}
 
@@ -520,5 +626,16 @@ namespace ProtocolTester
 				MessageBox.Show(e.Message);
 			}
 		}
+		
+		/// <summary>
+		/// 우클릭 메뉴 - parent 윈도우에 docking
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void dockingToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+		{
+			WindowDock(true);
+		}
+
 	}
 }
