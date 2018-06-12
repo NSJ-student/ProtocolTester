@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 using System.Xml.Linq;
+using System.Windows.Input;
 
 namespace ProtocolTester
 {
@@ -21,6 +22,9 @@ namespace ProtocolTester
 		private Thread ScheduleTask;
 		private DoDock WindowDock;
 		private SendMsg SendstrMsg;
+
+		private int rowIndexFromMouseDown;
+		private DataGridViewRow rowInstanceFromMouseDown;
 
 		public enum TypeNum
 		{
@@ -40,6 +44,9 @@ namespace ProtocolTester
 			SendstrMsg = SendEvent;
 			dockingToolStripMenuItem.Checked = dock;
 			WindowDock = DoDock;
+
+			rowInstanceFromMouseDown = null;
+			rowIndexFromMouseDown = -1;
 		}
 
 		/// <summary>
@@ -223,36 +230,7 @@ namespace ProtocolTester
 			}
 			Hide();
 		}
-
-		/// <summary>
-		/// Send 버튼 클릭 처리
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void dgvSchedule_CellClick(object sender, DataGridViewCellEventArgs e)
-		{
-			if (e.ColumnIndex == dgvSchedule.Columns["cSend"].Index)
-			{
-				if (e.RowIndex >= 0)
-				{
-					TerminateScheduleThread = false;
-					ThreadStart ts = new ThreadStart(ExecuteSingleRow);
-					ScheduleTask = new Thread(ts);
-					ScheduleTask.Start();
-				}
-			}
-			else if((dgvSchedule.Columns["cName"].Index <= e.ColumnIndex) &&
-					(e.ColumnIndex <= dgvSchedule.Columns["cDelayMs"].Index))
-			{
-				if(dgvSchedule.CurrentCell.RowIndex == e.RowIndex)
-				{
-					dgvSchedule.BeginEdit(true);
-				}
-//				dgvSchedule.CurrentCell = dgvSchedule[e.ColumnIndex, e.RowIndex];
-
-			}
-		}
-
+		
 		/// <summary>
 		/// Type 값 선택, 문자열 format 변경
 		/// </summary>
@@ -636,6 +614,125 @@ namespace ProtocolTester
 		{
 			WindowDock(true);
 		}
+		
+		/// <summary>
+		/// 드래그 앤 드랍으로 행 이동
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 
+		private void dgvSchedule_DragEnter(object sender, DragEventArgs e)
+		{
+			if (dgvSchedule.SelectedRows.Count > 0)
+			{
+				e.Effect = DragDropEffects.Move;
+			}
+		}
+
+		private void dgvSchedule_DragDrop(object sender, DragEventArgs e)
+		{
+			int rowIndexOfItemUnderMouseToDrop;
+			Point clientPoint = dgvSchedule.PointToClient(new Point(e.X, e.Y));
+
+			if(rowInstanceFromMouseDown == null)
+			{
+				return;
+			}
+			rowIndexOfItemUnderMouseToDrop = dgvSchedule.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
+
+			if (e.Effect == DragDropEffects.Move)
+			{
+				dgvSchedule.Rows.RemoveAt(rowIndexFromMouseDown);
+				if(rowIndexOfItemUnderMouseToDrop < 0)
+				{
+					rowIndexOfItemUnderMouseToDrop = dgvSchedule.Rows.Count - 1;
+				}
+				dgvSchedule.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowInstanceFromMouseDown);
+
+				dgvSchedule.ClearSelection();
+				rowInstanceFromMouseDown.Selected = true;
+				rowInstanceFromMouseDown = null;
+			}
+		}
+
+		private void dgvSchedule_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Left)
+			{
+				dgvSchedule.ClearSelection();
+				dgvSchedule.Rows[e.RowIndex].Selected = true;
+
+				rowInstanceFromMouseDown = dgvSchedule.Rows[e.RowIndex];
+				rowIndexFromMouseDown = e.RowIndex;
+			}
+		}
+		
+		private void dgvSchedule_CellMouseMove(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if(e.Button == MouseButtons.Left)
+			{
+				if (rowInstanceFromMouseDown == null)
+				{
+					return;
+				}
+				if(rowIndexFromMouseDown == e.RowIndex)
+				{
+					return;
+				}
+				dgvSchedule.DoDragDrop(rowInstanceFromMouseDown, DragDropEffects.Move);
+			}
+			else
+			{
+				rowInstanceFromMouseDown = null;
+				rowIndexFromMouseDown = -1;
+			}
+		}
+
+		/// <summary>
+		/// Send 버튼 클릭 처리
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void dgvSchedule_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.ColumnIndex == dgvSchedule.Columns["cSend"].Index)
+			{
+				if (e.RowIndex >= 0)
+				{
+					TerminateScheduleThread = false;
+					ThreadStart ts = new ThreadStart(ExecuteSingleRow);
+					ScheduleTask = new Thread(ts);
+					ScheduleTask.Start();
+				}
+			}
+			else if ((dgvSchedule.Columns["cName"].Index <= e.ColumnIndex) &&
+					(e.ColumnIndex <= dgvSchedule.Columns["cDelayMs"].Index))
+			{
+				if (dgvSchedule.CurrentCell.RowIndex == e.RowIndex)
+				{
+					dgvSchedule.BeginEdit(true);
+				}
+				//	dgvSchedule.CurrentCell = dgvSchedule[e.ColumnIndex, e.RowIndex];
+			}
+		}
+
+		/// <summary>
+		/// 공백 클릭할 때 선택 해제
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void dgvSchedule_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			int idx = dgvSchedule.HitTest(e.X, e.Y).RowIndex;
+
+			if (idx < 0)
+			{
+				dgvSchedule.EndEdit();
+				dgvSchedule.ClearSelection();
+
+				rowInstanceFromMouseDown = null;
+				rowIndexFromMouseDown = -1;
+			}
+		}
 	}
 }

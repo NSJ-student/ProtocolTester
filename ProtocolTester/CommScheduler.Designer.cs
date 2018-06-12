@@ -32,6 +32,14 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CommScheduler));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.dgvSchedule = new System.Windows.Forms.DataGridView();
+			this.cEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.cType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+			this.cFormat = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+			this.cName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cCycle = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cDelayMs = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.cSend = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnStart = new System.Windows.Forms.Button();
 			this.btnStop = new System.Windows.Forms.Button();
@@ -46,14 +54,6 @@
 			this.btnUp = new System.Windows.Forms.Button();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.dockingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.cEnable = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.cType = new System.Windows.Forms.DataGridViewComboBoxColumn();
-			this.cFormat = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-			this.cName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cCycle = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cDelayMs = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.cSend = new System.Windows.Forms.DataGridViewButtonColumn();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dgvSchedule)).BeginInit();
 			this.flowLayoutPanel2.SuspendLayout();
@@ -73,6 +73,7 @@
 			// 
 			// dgvSchedule
 			// 
+			this.dgvSchedule.AllowDrop = true;
 			this.dgvSchedule.AllowUserToAddRows = false;
 			this.dgvSchedule.AllowUserToResizeRows = false;
 			this.dgvSchedule.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -92,10 +93,75 @@
 			this.dgvSchedule.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 			this.dgvSchedule.RowTemplate.Height = 27;
 			this.dgvSchedule.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dgvSchedule.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSchedule_CellClick);
 			this.dgvSchedule.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSchedule_CellEndEdit);
+			this.dgvSchedule.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvSchedule_CellMouseDown);
+			this.dgvSchedule.CellMouseMove += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvSchedule_CellMouseMove);
+			this.dgvSchedule.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvSchedule_CellMouseUp);
 			this.dgvSchedule.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSchedule_CellValueChanged);
 			this.dgvSchedule.CurrentCellDirtyStateChanged += new System.EventHandler(this.dgvSchedule_CurrentCellDirtyStateChanged);
+			this.dgvSchedule.DragDrop += new System.Windows.Forms.DragEventHandler(this.dgvSchedule_DragDrop);
+			this.dgvSchedule.DragEnter += new System.Windows.Forms.DragEventHandler(this.dgvSchedule_DragEnter);
+			this.dgvSchedule.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dgvSchedule_MouseUp);
+			// 
+			// cEnable
+			// 
+			this.cEnable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			resources.ApplyResources(this.cEnable, "cEnable");
+			this.cEnable.Name = "cEnable";
+			this.cEnable.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// cType
+			// 
+			this.cType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+			resources.ApplyResources(this.cType, "cType");
+			this.cType.Items.AddRange(new object[] {
+            "SEND",
+            "DELAY"});
+			this.cType.Name = "cType";
+			this.cType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// cFormat
+			// 
+			this.cFormat.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			resources.ApplyResources(this.cFormat, "cFormat");
+			this.cFormat.Name = "cFormat";
+			this.cFormat.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			// 
+			// cName
+			// 
+			resources.ApplyResources(this.cName, "cName");
+			this.cName.Name = "cName";
+			// 
+			// cValue
+			// 
+			this.cValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+			resources.ApplyResources(this.cValue, "cValue");
+			this.cValue.Name = "cValue";
+			// 
+			// cCycle
+			// 
+			this.cCycle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			resources.ApplyResources(this.cCycle, "cCycle");
+			this.cCycle.Name = "cCycle";
+			this.cCycle.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// cDelayMs
+			// 
+			this.cDelayMs.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			resources.ApplyResources(this.cDelayMs, "cDelayMs");
+			this.cDelayMs.MaxInputLength = 10;
+			this.cDelayMs.Name = "cDelayMs";
+			this.cDelayMs.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.cDelayMs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+			// 
+			// cSend
+			// 
+			this.cSend.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+			resources.ApplyResources(this.cSend, "cSend");
+			this.cSend.Name = "cSend";
+			this.cSend.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+			this.cSend.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+			this.cSend.Text = "Send";
 			// 
 			// flowLayoutPanel2
 			// 
@@ -194,66 +260,6 @@
 			this.dockingToolStripMenuItem.Name = "dockingToolStripMenuItem";
 			resources.ApplyResources(this.dockingToolStripMenuItem, "dockingToolStripMenuItem");
 			this.dockingToolStripMenuItem.CheckedChanged += new System.EventHandler(this.dockingToolStripMenuItem_CheckedChanged);
-			// 
-			// cEnable
-			// 
-			this.cEnable.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			resources.ApplyResources(this.cEnable, "cEnable");
-			this.cEnable.Name = "cEnable";
-			this.cEnable.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// cType
-			// 
-			this.cType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-			resources.ApplyResources(this.cType, "cType");
-			this.cType.Items.AddRange(new object[] {
-            "SEND",
-            "DELAY"});
-			this.cType.Name = "cType";
-			this.cType.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// cFormat
-			// 
-			this.cFormat.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			resources.ApplyResources(this.cFormat, "cFormat");
-			this.cFormat.Name = "cFormat";
-			this.cFormat.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			// 
-			// cName
-			// 
-			resources.ApplyResources(this.cName, "cName");
-			this.cName.Name = "cName";
-			// 
-			// cValue
-			// 
-			this.cValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-			resources.ApplyResources(this.cValue, "cValue");
-			this.cValue.Name = "cValue";
-			// 
-			// cCycle
-			// 
-			this.cCycle.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			resources.ApplyResources(this.cCycle, "cCycle");
-			this.cCycle.Name = "cCycle";
-			this.cCycle.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			// 
-			// cDelayMs
-			// 
-			this.cDelayMs.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			resources.ApplyResources(this.cDelayMs, "cDelayMs");
-			this.cDelayMs.MaxInputLength = 10;
-			this.cDelayMs.Name = "cDelayMs";
-			this.cDelayMs.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.cDelayMs.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-			// 
-			// cSend
-			// 
-			this.cSend.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-			resources.ApplyResources(this.cSend, "cSend");
-			this.cSend.Name = "cSend";
-			this.cSend.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-			this.cSend.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-			this.cSend.Text = "Send";
 			// 
 			// CommScheduler
 			// 

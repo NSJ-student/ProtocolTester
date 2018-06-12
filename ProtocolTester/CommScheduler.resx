@@ -651,12 +651,6 @@
   <data name="$this.Text" xml:space="preserve">
     <value>Scheduler</value>
   </data>
-  <data name="&gt;&gt;dockingToolStripMenuItem.Name" xml:space="preserve">
-    <value>dockingToolStripMenuItem</value>
-  </data>
-  <data name="&gt;&gt;dockingToolStripMenuItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;cEnable.Name" xml:space="preserve">
     <value>cEnable</value>
   </data>
@@ -704,6 +698,12 @@
   </data>
   <data name="&gt;&gt;cSend.Type" xml:space="preserve">
     <value>System.Windows.Forms.DataGridViewButtonColumn, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;dockingToolStripMenuItem.Name" xml:space="preserve">
+    <value>dockingToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;dockingToolStripMenuItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>CommScheduler</value>
