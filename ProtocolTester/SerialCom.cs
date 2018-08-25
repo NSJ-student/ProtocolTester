@@ -15,11 +15,13 @@ namespace ProtocolTester
 	{
 		SerialPort PortInfo;
 		Thread rxThread;
-		public event ReceiveHandler OnRecvMsg;
+        ThreadStart ts;
+        public event ReceiveHandler OnRecvMsg;
 		public event OpenCloseHandler OnOpenClose;
 		public event LogHandler OnLogAdded;
+        public event UpdateTitle OnTitleChange;
 
-		public CommType Type
+        public CommType Type
 		{
 			get
 			{
@@ -42,8 +44,8 @@ namespace ProtocolTester
 		}
 		public SerialCom()
 		{
-			ThreadStart ts = new ThreadStart(ReadMsg);
-			rxThread = new Thread(ts);
+			ts = new ThreadStart(ReadMsg);
+//			rxThread = new Thread(ts);
 		}
 		public SerialCom(string PortName, int BaudRate)
 			: this()
@@ -66,10 +68,16 @@ namespace ProtocolTester
 
 			try
 			{
+				PortInfo.ReadTimeout = 100;
+				PortInfo.WriteTimeout = 100;
 				PortInfo.Open();
 				OnOpenClose(true);
-				rxThread.Start();
-				return true;
+                rxThread = new Thread(ts);
+                rxThread.Start();
+
+                OnTitleChange("Tester (" + PortInfo.PortName + ")");
+
+                return true;
 			}
 			catch
 			{
@@ -86,7 +94,9 @@ namespace ProtocolTester
 				}
 				PortInfo.Close();
 				OnOpenClose(false);
-			}
+
+                OnTitleChange("Tester");
+            }
 		}
 
 		public bool SendData(byte[] Msg, MsgFormat Format)

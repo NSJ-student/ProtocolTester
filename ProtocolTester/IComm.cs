@@ -22,12 +22,15 @@ namespace ProtocolTester
 	public delegate bool ReceiveHandler(byte[] recvMsg);
 	public delegate void OpenCloseHandler(bool IsOpen);
 	public delegate void LogHandler(object Obj, string Log);
+    public delegate void UpdateTitle(string title);
 	public interface IComm
 	{
 		event ReceiveHandler OnRecvMsg;
 		event OpenCloseHandler OnOpenClose;
 		event LogHandler OnLogAdded;
-		bool IsOpen { get; }
+        event UpdateTitle OnTitleChange;
+
+        bool IsOpen { get; }
 		object CurrentPort { get; }
 		CommType Type { get; }
 		bool OpenPort(object port);

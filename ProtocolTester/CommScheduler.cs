@@ -659,11 +659,14 @@ namespace ProtocolTester
 		{
 			if (e.Button == MouseButtons.Left)
 			{
-				dgvSchedule.ClearSelection();
-				dgvSchedule.Rows[e.RowIndex].Selected = true;
+				if(e.RowIndex > 0)
+				{
+					dgvSchedule.ClearSelection();
+					dgvSchedule.Rows[e.RowIndex].Selected = true;
 
-				rowInstanceFromMouseDown = dgvSchedule.Rows[e.RowIndex];
-				rowIndexFromMouseDown = e.RowIndex;
+					rowInstanceFromMouseDown = dgvSchedule.Rows[e.RowIndex];
+					rowIndexFromMouseDown = e.RowIndex;
+				}
 			}
 		}
 		
@@ -679,7 +682,23 @@ namespace ProtocolTester
 				{
 					return;
 				}
-				dgvSchedule.DoDragDrop(rowInstanceFromMouseDown, DragDropEffects.Move);
+//				dgvSchedule.DoDragDrop(rowInstanceFromMouseDown, DragDropEffects.Move);
+
+				int rowIndexOfItemUnderMouseToDrop;
+//				Point clientPoint = dgvSchedule.PointToClient(new Point(e.X, e.Y));
+//				rowIndexOfItemUnderMouseToDrop = dgvSchedule.HitTest(clientPoint.X, clientPoint.Y).RowIndex;
+				rowIndexOfItemUnderMouseToDrop = e.RowIndex;
+
+				dgvSchedule.Rows.RemoveAt(rowIndexFromMouseDown);
+				if (rowIndexOfItemUnderMouseToDrop < 0)
+				{
+					rowIndexOfItemUnderMouseToDrop = dgvSchedule.Rows.Count - 1;
+				}
+				dgvSchedule.Rows.Insert(rowIndexOfItemUnderMouseToDrop, rowInstanceFromMouseDown);
+
+				dgvSchedule.ClearSelection();
+				rowInstanceFromMouseDown.Selected = true;
+				rowIndexFromMouseDown = rowInstanceFromMouseDown.Index;
 			}
 			else
 			{
@@ -695,6 +714,12 @@ namespace ProtocolTester
 		/// <param name="e"></param>
 		private void dgvSchedule_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
 		{
+			if (rowInstanceFromMouseDown != null)
+			{
+				rowInstanceFromMouseDown = null;
+				rowIndexFromMouseDown = -1;
+			}
+
 			if (e.ColumnIndex == dgvSchedule.Columns["cSend"].Index)
 			{
 				if (e.RowIndex >= 0)

@@ -51,8 +51,9 @@ namespace ProtocolTester
 		public event ReceiveHandler OnRecvMsg;
 		public event OpenCloseHandler OnOpenClose;
 		public event LogHandler OnLogAdded;
+        public event UpdateTitle OnTitleChange;
 
-		public TcpClientCom()
+        public TcpClientCom()
 		{
 			ts = new ThreadStart(RxClientMsg);
 		}
@@ -69,7 +70,9 @@ namespace ProtocolTester
 				OnOpenClose(true);
 				ClientThread = new Thread(ts);
 				ClientThread.Start();
-				return true;
+                OnTitleChange("Tester (" + ClientIP.Address.ToString() + ")");
+
+                return true;
 			}
 			catch (Exception es)
 			{
@@ -86,7 +89,9 @@ namespace ProtocolTester
 				if (ClientThread.IsAlive)
 					ClientThread.Abort();
 				OnOpenClose(false);
-			}
+
+                OnTitleChange("Tester");
+            }
 			catch (Exception es)
 			{
 				OnLogAdded(this, "*** Close Error : " + es.Message);

@@ -38,6 +38,7 @@ namespace ProtocolTester
 			commObj.OnRecvMsg += UpdateUI_Receive;
 			commObj.OnOpenClose += UpdateUI_OpenClose;
 			commObj.OnLogAdded += UpdateUI_Log;
+            commObj.OnTitleChange += UpdateUI_Title;
 			commObj.LoadInit();
 
 			btnSend.Enabled = false;
@@ -269,14 +270,18 @@ namespace ProtocolTester
 			if (txtSendMsg.BackColor != SystemColors.Window)
 				txtSendMsg.BackColor = SystemColors.Window;
 		}
+        private void UpdateUI_Title(string title)
+        {
+            this.Text = title;
+        }
 
-		/// <summary>
-		/// 열린 통신 포트로 메시지 송신
-		/// </summary>
-		/// <param name="TxMsg"></param>
-		/// <param name="ishex"></param>
-		/// <returns></returns>
-		private bool Port_Send(string TxMsg, bool ishex)
+        /// <summary>
+        /// 열린 통신 포트로 메시지 송신
+        /// </summary>
+        /// <param name="TxMsg"></param>
+        /// <param name="ishex"></param>
+        /// <returns></returns>
+        private bool Port_Send(string TxMsg, bool ishex)
 		{
 			if ((commObj != null) && (commObj.IsOpen))
 			{
@@ -497,6 +502,5 @@ namespace ProtocolTester
 				rtbLog.SelectionColor = oldColor;
 			}
 		}
-
 	}
 }

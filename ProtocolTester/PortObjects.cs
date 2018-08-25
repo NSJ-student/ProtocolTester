@@ -15,8 +15,9 @@ namespace ProtocolTester
 		public event ReceiveHandler OnRecvMsg;
 		public event OpenCloseHandler OnOpenClose;
 		public event LogHandler OnLogAdded;
+        public event UpdateTitle OnTitleChange;
 
-		public CommType Type
+        public CommType Type
 		{
 			get
 			{
@@ -59,7 +60,11 @@ namespace ProtocolTester
 			TcpServerComPort.OnLogAdded += LogData;
 			TcpClientComPort.OnLogAdded += LogData;
 
-			CurrentComPort = null;
+            SerialComPort.OnTitleChange += ChangeTitle;
+            TcpServerComPort.OnTitleChange += ChangeTitle;
+            TcpClientComPort.OnTitleChange += ChangeTitle;
+
+            CurrentComPort = null;
 		}
 
 		public bool SelectPort(CommType type)
@@ -123,9 +128,13 @@ namespace ProtocolTester
 		private void LogData(object Obj, string Log)
 		{
 			OnLogAdded(Obj, Log);
-		}
+        }
+        private void ChangeTitle(string title)
+        {
+            OnTitleChange(title);
+        }
 
-		public bool LoadInit()
+        public bool LoadInit()
 		{
 			bool ret1 = SerialComPort.LoadInit();
 			bool ret2 = TcpClientComPort.LoadInit();
