@@ -103,8 +103,16 @@ namespace ProtocolTester
 		{
 			if(IsOpen)
 			{
-				string sendData = Encoding.Default.GetString(Msg);
-				PortInfo.Write(sendData);
+                if(Format == MsgFormat.MSG_STRING)
+                {
+                    string sendData = Encoding.Default.GetString(Msg);
+                    PortInfo.Write(sendData);
+                }
+                else
+                {
+                    string sendData = Encoding.Default.GetString(Msg);
+                    PortInfo.Write(Msg,0,Msg.Length);
+                }
 				return true;
 			}
 			else

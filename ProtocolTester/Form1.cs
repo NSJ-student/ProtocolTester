@@ -294,8 +294,9 @@ namespace ProtocolTester
 						if(txtSendMsg.BackColor != Color.LightPink)
 							txtSendMsg.BackColor = Color.LightPink;
 						return false;
-					}
-				}
+                    }
+                    commObj.SendData(Msg, MsgFormat.MSG_STRING);
+                }
 				else
 				{
 					Msg = KeyParser.HexStringToHexByte(TxMsg);
@@ -304,10 +305,10 @@ namespace ProtocolTester
 						if (txtSendMsg.BackColor != Color.LightPink)
 							txtSendMsg.BackColor = Color.LightPink;
 						return false;
-					}
-				}
+                    }
+                    commObj.SendData(Msg, MsgFormat.MSG_HEX);
+                }
 
-				commObj.SendData(Msg, MsgFormat.MSG_STRING);
 
 				UpdateUI_Send(Msg);
 				return true;
